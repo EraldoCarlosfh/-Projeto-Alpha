@@ -8,5 +8,6 @@ namespace Alpha.Domain.Configurations
 {
     public class ContextSettingsConfiguration
     {
+        public string UserAdmin { get; set; }
     }
 }

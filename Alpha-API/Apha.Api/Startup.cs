@@ -24,6 +24,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.Extensions.Hosting;
+using Alpha.Providers.Encryption.Module;
+using Alpha.Providers.Encryption.Configurations;
 
 namespace Alpha.Api
 {
@@ -64,13 +66,13 @@ namespace Alpha.Api
             });
 
             var contextSettings = Configuration.GetSection("ContextSettings").Get<ContextSettingsConfiguration>();
-            services.AddSingleton(contextSettings);       
+            services.AddSingleton(contextSettings);
 
             services.ConfigureMediator(_assembly, Configuration.GetConnectionString("SQLConnection"));
             services.ConfigureSecurityService(Configuration.GetSection("Token").Get<TokenConfiguration>());
+            services.ConfigureEncryption(Configuration.GetSection("Crypto").Get<CryptoConfiguration>());
 
             services.ConfigureAutoMapper();
-
             services.ConfigureData();
             services.ConfigureQuery();
 

@@ -21,6 +21,7 @@
     <ProjectReference Include="..\Alpha.Data\Alpha.Data.csproj" />
     <ProjectReference Include="..\Alpha.Domain\Alpha.Domain.csproj" />
     <ProjectReference Include="..\Alpha.Framework.MediatR\Alpha.Framework.MediatR.csproj" />
+    <ProjectReference Include="..\Alpha.Providers.Encryption\Alpha.Providers.Encryption.csproj" />
     <ProjectReference Include="..\Alpha.Query\Alpha.Query.csproj" />
   </ItemGroup>
 
