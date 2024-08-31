@@ -7,6 +7,7 @@ using Alpha.Data.Configurations.Users;
 using Alpha.Framework.MediatR.Data.Converters;
 using System;
 using System.IO;
+using Alpha.Framework.MediatR.Auditorship.Data;
 
 namespace Alpha.Data
 {
@@ -22,7 +23,8 @@ namespace Alpha.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());          
+            modelBuilder.ConfigureAuditorshipDataContext();
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
         }
     }
@@ -36,12 +38,12 @@ namespace Alpha.Data
 
             // Build config
             IConfiguration config = new ConfigurationBuilder()
-                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../Alpha.Api"))
+                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../Apha.Api"))
                 .AddJsonFile($"appsettings.{environmentName}.json", optional: false, reloadOnChange: true)
                 .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder<AlphaDataContext>();
-            optionsBuilder.UseSqlServer(config.GetConnectionString("SQLConnection"), builder =>
+            optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"), builder =>
             {
                 builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
             });

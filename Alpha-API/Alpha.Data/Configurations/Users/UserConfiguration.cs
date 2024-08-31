@@ -2,6 +2,7 @@
 using Alpha.Framework.MediatR.Data.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 namespace Alpha.Data.Configurations.Users
 {
     public class UserConfiguration : EntityConfigurationBase<User>

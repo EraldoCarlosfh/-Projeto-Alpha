@@ -1,4 +1,5 @@
-﻿using Alpha.Framework.MediatR.Data.UnitOfWork;
+﻿using Alpha.Framework.MediatR.Auditorship.Domain.Entities;
+using Alpha.Framework.MediatR.Data.UnitOfWork;
 using Alpha.Framework.MediatR.EventSourcing.Domains;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -72,7 +73,12 @@ namespace Alpha.Data
                         break;
                 }
             }
-        } 
+        }
+
+        public async Task AddAudit(Audit audit)
+        {
+            await _dbContext.Set<Audit>().AddAsync(audit);
+        }
 
         public async Task<int> CommitAsyncForDbSet<TEntity>() where TEntity : class
         {

@@ -4,8 +4,6 @@ using Microsoft.OpenApi.Models;
 using System.Net;
 using System.Reflection;
 using Alpha.Framework.MediatR.IoC;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Authorization;
 using Alpha.Framework.MediatR.EventSourcing.Modules;
 using Alpha.Framework.MediatR.SecurityService.Modules;
 using Alpha.Framework.MediatR.SecurityService.Configurations;
@@ -26,6 +24,8 @@ using System.IO;
 using Microsoft.Extensions.Hosting;
 using Alpha.Providers.Encryption.Module;
 using Alpha.Providers.Encryption.Configurations;
+using Alpha.Framework.MediatR.Api.Filters;
+using Alpha.Data;
 
 namespace Alpha.Api
 {
@@ -44,11 +44,21 @@ namespace Alpha.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddEntityFrameworkSqlServer()
-                .AddDbContext<Data.AlphaDataContext>(options =>
+            //services.AddEntityFrameworkSqlServer()
+            //    .AddDbContext<AlphaDataContext>(options =>
+            //    {
+            //        options
+            //            .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+            //            .ReplaceService<IValueConverterSelector, StronglyTypedValueConverterSelector>();
+
+
+            //    }, ServiceLifetime.Scoped);
+
+            services.AddEntityFrameworkNpgsql()
+                .AddDbContext<AlphaDataContext>(options =>
                 {
                     options
-                        .UseSqlServer(Configuration.GetConnectionString("SQLConnection"))
+                        .UseNpgsql(Configuration.GetConnectionString("DefaultConnection"))
                         .ReplaceService<IValueConverterSelector, StronglyTypedValueConverterSelector>();
 
 
@@ -68,7 +78,7 @@ namespace Alpha.Api
             var contextSettings = Configuration.GetSection("ContextSettings").Get<ContextSettingsConfiguration>();
             services.AddSingleton(contextSettings);
 
-            services.ConfigureMediator(_assembly, Configuration.GetConnectionString("SQLConnection"));
+            services.ConfigureMediator(_assembly, Configuration.GetConnectionString("DefaultConnection"));
             services.ConfigureSecurityService(Configuration.GetSection("Token").Get<TokenConfiguration>());
             services.ConfigureEncryption(Configuration.GetSection("Crypto").Get<CryptoConfiguration>());
 
@@ -114,16 +124,10 @@ namespace Alpha.Api
                     }
                 });
             });
-
-
-            services.AddHealthChecks();
-
+    
             services.AddControllers(options =>
             {
-                var policy = new AuthorizationPolicyBuilder()
-                     .RequireAuthenticatedUser()
-                     .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
+                options.Filters.Add<HttpResponseExceptionFilter>();
             }).AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
@@ -177,16 +181,12 @@ namespace Alpha.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint(url: "/swagger/v1/swagger.json", name: "Aplha.Api"));
             }
 
-            app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseCors(MyAllowSpecificOrigins);
-            app.UseAuthentication();
-            app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });   
+            app.UseCors(MyAllowSpecificOrigins);
+
+            app.UseAuthentication();
+            app.UseAuthorization();           
 
             app.UseEndpoints(endpoints =>
             {

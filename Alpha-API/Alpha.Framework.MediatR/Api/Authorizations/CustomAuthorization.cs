@@ -38,25 +38,7 @@ namespace Alpha.Framework.MediatR.Api.Authorizations
                 var token = new JwtSecurityToken(tokenContent);
 
                 if (token != null || token.ValidTo >= DateTime.UtcNow.ToLocalTime())
-                {
-                    if (_accesses != null && _accesses.Any())
-                    {
-                        var userRoles = token.Claims.Where(c => c.Type == "role")?.Select(c => Convert.ToInt32(c.Value))?.ToList();
-
-                        if (userRoles != null && userRoles.Any())
-                        {
-                            if (_accesses.Intersect(userRoles).Any())
-                            {
-                                return;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        return;
-                    }
-
-                }
+                    return;
             }
 
             context.Result = new UnauthorizedResult();
