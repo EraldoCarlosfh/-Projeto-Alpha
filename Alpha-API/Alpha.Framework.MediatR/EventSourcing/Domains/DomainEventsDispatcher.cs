@@ -1,6 +1,6 @@
 ﻿using Alpha.Framework.MediatR.EventSourcing.Entity;
 using MediatR;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Alpha.Framework.MediatR.EventSourcing.Domains
 {
@@ -35,3 +35,4 @@ namespace Alpha.Framework.MediatR.EventSourcing.Domains
         }
     }
 }
+
