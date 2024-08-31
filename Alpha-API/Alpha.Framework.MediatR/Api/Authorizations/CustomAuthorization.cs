@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
+using System;
+using System.Linq;
 
 namespace Alpha.Framework.MediatR.Api.Authorizations
 {

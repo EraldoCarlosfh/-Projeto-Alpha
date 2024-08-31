@@ -3,6 +3,9 @@ using Alpha.Framework.MediatR.EventSourcing.Entity;
 using Alpha.Framework.MediatR.Notifications;
 using Alpha.Framework.MediatR.SecurityService.Models;
 using MediatR;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Alpha.Framework.MediatR.EventSourcing.Commands
 {

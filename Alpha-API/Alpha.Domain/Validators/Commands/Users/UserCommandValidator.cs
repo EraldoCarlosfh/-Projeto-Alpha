@@ -7,6 +7,8 @@ using Alpha.Framework.MediatR.Resources.Extensions;
 using Alpha.Integrations.Encryption;
 using FluentValidation;
 using OctaTech.Domain.Validators;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Alpha.Domain.Validators.Commands.Users
 {

@@ -1,4 +1,6 @@
-﻿namespace Alpha.Framework.MediatR.EventSourcing.Entity
+﻿using System;
+
+namespace Alpha.Framework.MediatR.EventSourcing.Entity
 {
     public abstract class TypedIdValueBase : IEquatable<TypedIdValueBase>, IComparable
     {

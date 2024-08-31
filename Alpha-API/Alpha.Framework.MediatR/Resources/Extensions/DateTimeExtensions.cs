@@ -1,4 +1,5 @@
-﻿using TimeZoneConverter;
+﻿using System;
+using TimeZoneConverter;
 
 namespace Alpha.Framework.MediatR.Resources.Extensions
 {

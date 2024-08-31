@@ -1,5 +1,6 @@
 ﻿using Alpha.Framework.MediatR.Notifications;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Alpha.Framework.MediatR.Api.Controllers
 {

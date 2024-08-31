@@ -9,6 +9,9 @@ using Alpha.Domain.Queries.Products;
 using System.Data;
 using System.Data.Entity;
 using Alpha.Framework.MediatR.Data.Queries;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Alpha.Query.Queries.Users
 {

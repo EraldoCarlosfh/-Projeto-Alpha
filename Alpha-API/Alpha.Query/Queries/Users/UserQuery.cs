@@ -5,8 +5,11 @@ using Alpha.Framework.MediatR.EventSourcing.Entity;
 using Alpha.Framework.MediatR.Resources.Extensions;
 using Alpha.Framework.MediatR.SecurityService.Models;
 using Alpha.Integrations.Encryption;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Alpha.Query.Queries.Users
 {

@@ -1,14 +1,10 @@
 ﻿using Alpha.Framework.MediatR.Data.Connection;
+using Alpha.Framework.MediatR.Data.Converters;
+using Alpha.Framework.MediatR.EventSourcing.Domains;
 using MediatR;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Alpha.Framework.MediatR.EventSourcing.Modules
 {
@@ -19,7 +15,7 @@ namespace Alpha.Framework.MediatR.EventSourcing.Modules
             services.AddMediatR(assembly);
 
             services.AddScoped<ISqlConnectionFactory>(x =>
-                ActivatorUtilities.CreateInstance<SqlConnectionFactory>(x, _databaseConnectionString));
+                ActivatorUtilities.CreateInstance<Data.Connection.SqlConnectionFactory>(x, _databaseConnectionString));
 
             services.AddScoped<IDomainEventsDispatcher, DomainEventsDispatcher>();
             services.AddSingleton<IValueConverterSelector, StronglyTypedValueConverterSelector>();

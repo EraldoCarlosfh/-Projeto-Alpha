@@ -1,6 +1,7 @@
 ﻿using Alpha.Domain.Entities;
 using Alpha.Framework.MediatR.Data.Queries;
 using Alpha.Framework.MediatR.EventSourcing.Entity;
+using System.Threading.Tasks;
 
 namespace Alpha.Domain.Queries.Users
 {

@@ -11,6 +11,8 @@ using Alpha.Framework.MediatR.SecurityService;
 using Alpha.Integrations.Encryption;
 using MediatR;
 using Alpha.Domain.Validators.Commands.Users;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Alpha.Domain.Commands.Users
 {

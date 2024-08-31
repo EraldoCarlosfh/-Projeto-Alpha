@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using FluentValidation.Results;
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Alpha.Framework.MediatR.Notifications
 {

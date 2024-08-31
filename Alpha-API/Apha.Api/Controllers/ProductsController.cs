@@ -1,12 +1,8 @@
 ﻿using Alpha.Api.ViewModels.Products;
-using Alpha.Api.ViewModels.Users;
 using Alpha.Domain.Commands.Users;
 using Alpha.Domain.Entities;
 using Alpha.Domain.Queries.Products;
-using Alpha.Domain.Queries.Users;
-using Alpha.Domain.Responses.Users;
 using Alpha.Framework.MediatR.Api.Authorizations;
-using Alpha.Framework.MediatR.Api.Controllers;
 using Alpha.Framework.MediatR.EventSourcing.Domains;
 using Alpha.Framework.MediatR.Resources.Extensions;
 using Alpha.Framework.MediatR.SecurityService.Models;
@@ -15,8 +11,9 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Net;
-using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace Alpha.Api.Controllers
 {

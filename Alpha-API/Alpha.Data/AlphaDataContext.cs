@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Alpha.Data.Configurations.Users;
 using Alpha.Framework.MediatR.Data.Converters;
+using System;
+using System.IO;
 
 namespace Alpha.Data
 {

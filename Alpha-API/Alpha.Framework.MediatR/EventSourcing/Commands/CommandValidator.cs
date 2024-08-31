@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
 using Alpha.Framework.MediatR.IoC;
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
+using System;
 
 namespace Alpha.Framework.MediatR.EventSourcing.Commands
 {

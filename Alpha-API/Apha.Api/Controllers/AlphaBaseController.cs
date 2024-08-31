@@ -5,6 +5,8 @@ using Alpha.Framework.MediatR.EventSourcing.Domains;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Alpha.Domain.Commands;
+using System;
+using System.Collections.Generic;
 
 namespace Alpha.Api.Controllers
 {

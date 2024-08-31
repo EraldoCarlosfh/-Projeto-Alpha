@@ -2,7 +2,10 @@
 using Alpha.Framework.MediatR.EventSourcing.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Alpha.Data
 {

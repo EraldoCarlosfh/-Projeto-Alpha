@@ -1,4 +1,5 @@
 ﻿using Alpha.Domain.Entities;
+using System;
 
 namespace Alpha.Domain.Responses.Users
 {

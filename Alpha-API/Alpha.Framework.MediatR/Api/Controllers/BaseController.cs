@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using Alpha.Framework.MediatR.EventSourcing.Domains;
+using System.Linq;
 
 namespace Alpha.Framework.MediatR.Api.Controllers
 {

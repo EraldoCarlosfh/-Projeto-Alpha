@@ -1,4 +1,6 @@
-﻿namespace Alpha.Domain.Responses.Users
+﻿using System;
+
+namespace Alpha.Domain.Responses.Users
 {
     public class CodeOperationResponse
     {

@@ -1,5 +1,6 @@
 ﻿using Alpha.Domain.Enums;
 using Alpha.Framework.MediatR.EventSourcing.Entity;
+using System;
 
 namespace Alpha.Domain.Entities
 {

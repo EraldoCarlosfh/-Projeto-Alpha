@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Alpha.Framework.MediatR.EventSourcing.Domains
 {

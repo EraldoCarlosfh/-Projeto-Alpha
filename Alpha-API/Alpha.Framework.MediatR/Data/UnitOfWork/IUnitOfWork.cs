@@ -1,4 +1,7 @@
-﻿namespace Alpha.Framework.MediatR.Data.UnitOfWork
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+namespace Alpha.Framework.MediatR.Data.UnitOfWork
 {
     public interface IUnitOfWork
     {

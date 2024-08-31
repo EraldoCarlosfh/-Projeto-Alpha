@@ -8,6 +8,7 @@ using Alpha.Framework.MediatR.Notifications;
 using Alpha.Framework.MediatR.Resources.Extensions;
 using Alpha.Framework.MediatR.SecurityService.Models;
 using MediatR;
+using System.Collections.Generic;
 
 namespace Alpha.Domain.Commands
 {
@@ -63,12 +64,7 @@ namespace Alpha.Domain.Commands
         public CommandResult<TEntity> ValidationErrors(IReadOnlyCollection<Notification> notifications)
         {
             return new CommandResult<TEntity>(false, "Errors", notifications);
-        }
-
-        public CommandResult<List<TEntity>> ValidationListErrors(IReadOnlyCollection<Notification> notifications)
-        {
-            return new CommandResult<List<TEntity>>(false, "Errors", notifications);
-        }
+        }     
 
         public CommandResult<TEntity> Success(TEntity data)
         {

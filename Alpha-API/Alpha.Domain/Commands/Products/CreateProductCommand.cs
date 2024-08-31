@@ -6,6 +6,8 @@ using Alpha.Framework.MediatR.SecurityService.Models;
 using MediatR;
 using Alpha.Domain.Queries.Users;
 using Alpha.Domain.Validators.Commands.Products;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Alpha.Domain.Commands.Users
 {

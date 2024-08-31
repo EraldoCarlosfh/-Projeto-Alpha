@@ -1,4 +1,6 @@
-﻿namespace Alpha.Framework.MediatR.Validations
+﻿using System;
+
+namespace Alpha.Framework.MediatR.Validations
 {
     public partial class ValidationContract
     {

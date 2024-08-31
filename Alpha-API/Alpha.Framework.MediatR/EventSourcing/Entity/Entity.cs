@@ -1,6 +1,8 @@
 ﻿using Alpha.Framework.MediatR.Notifications;
 using Alpha.Framework.MediatR.Resources.Extensions;
 using MediatR;
+using System;
+using System.Collections.Generic;
 
 namespace Alpha.Framework.MediatR.EventSourcing.Entity
 {

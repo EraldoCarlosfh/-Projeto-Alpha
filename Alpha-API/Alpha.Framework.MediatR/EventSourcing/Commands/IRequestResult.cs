@@ -1,4 +1,5 @@
 ﻿using Alpha.Framework.MediatR.Notifications;
+using System.Collections.Generic;
 
 namespace Alpha.Framework.MediatR.EventSourcing.Commands
 {

@@ -1,5 +1,8 @@
 ﻿using Alpha.Framework.MediatR.EventSourcing.Domains;
+using System;
 using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Alpha.Framework.MediatR.Data.Queries
 {
@@ -20,7 +23,7 @@ namespace Alpha.Framework.MediatR.Data.Queries
 
                 var pagedSearchResult = new PagedSearchResult()
                 {
-                    SearchResult = list.AsNoTracking().ToList(),
+                    SearchResult = await list.AsNoTracking().ToListAsync(),
                     TotalRecords = count,
                     PageIndex = pagedSearchRequest.PageIndex,
                     PageCount = count / pagedSearchRequest.PageSize,
@@ -50,7 +53,7 @@ namespace Alpha.Framework.MediatR.Data.Queries
             {
                 var pagedSearchResult = new PagedSearchResult()
                 {
-                    SearchResult = list.AsNoTracking().ToList(),
+                    SearchResult = await list.AsNoTracking().ToListAsync(),
                     TotalRecords = list.Count(),
                     PageIndex = pagedSearchRequest.PageIndex,
                     PageCount = list.Count() / pagedSearchRequest.PageSize,

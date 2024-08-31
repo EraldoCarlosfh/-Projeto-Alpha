@@ -1,4 +1,6 @@
-﻿namespace Alpha.Api.ViewModels.Users
+﻿using System;
+
+namespace Alpha.Api.ViewModels.Users
 {
     public class CodeOperationResponseViewModel : IViewModel
     {

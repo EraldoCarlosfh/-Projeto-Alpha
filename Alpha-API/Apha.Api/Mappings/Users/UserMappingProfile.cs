@@ -3,6 +3,7 @@ using Alpha.Domain.Entities;
 using Alpha.Domain.Responses.Users;
 using Alpha.Integrations.Encryption;
 using AutoMapper;
+using System;
 
 namespace Alpha.Api.Mappings.Users
 {

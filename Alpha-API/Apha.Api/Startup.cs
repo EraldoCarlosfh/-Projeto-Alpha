@@ -16,6 +16,14 @@ using Alpha.Data.Modules;
 using Alpha.Query.Modules;
 using Alpha.Domain.Configurations;
 using Alpha.Api.Mappings;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.Extensions.Hosting;
 
 namespace Alpha.Api
 {

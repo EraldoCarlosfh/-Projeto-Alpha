@@ -3,6 +3,7 @@ using Alpha.Domain.Configurations;
 using Alpha.Framework.MediatR.SecurityService.Models;
 using Alpha.Integrations.Encryption;
 using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Alpha.Api.Mappings
 {

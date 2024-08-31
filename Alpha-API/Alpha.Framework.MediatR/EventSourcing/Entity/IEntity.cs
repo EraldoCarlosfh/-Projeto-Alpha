@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using System.Collections.Generic;
 
 namespace Alpha.Framework.MediatR.EventSourcing.Entity
 {

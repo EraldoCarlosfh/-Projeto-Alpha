@@ -11,6 +11,9 @@ using Alpha.Framework.MediatR.SecurityService.Models;
 using Alpha.Framework.MediatR.SecurityService;
 using Alpha.Integrations.Encryption;
 using MediatR;
+using System.Threading.Tasks;
+using System.Threading;
+using System;
 
 namespace Alpha.Domain.Commands.Users
 {

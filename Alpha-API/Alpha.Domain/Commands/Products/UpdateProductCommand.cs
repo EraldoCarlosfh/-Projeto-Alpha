@@ -7,6 +7,8 @@ using MediatR;
 using Alpha.Domain.Queries.Users;
 using Alpha.Domain.Validators.Commands.Products;
 using Alpha.Framework.MediatR.Resources.Extensions;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Alpha.Domain.Commands.Users
 {

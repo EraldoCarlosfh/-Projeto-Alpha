@@ -12,6 +12,9 @@ using Alpha.Framework.MediatR.SecurityService;
 using Alpha.Integrations.Encryption;
 using MediatR;
 using Alpha.Framework.MediatR.EventSourcing.Validators.Attributes;
+using System.Threading.Tasks;
+using System.Threading;
+using System;
 
 namespace Alpha.Domain.Commands.Users
 {

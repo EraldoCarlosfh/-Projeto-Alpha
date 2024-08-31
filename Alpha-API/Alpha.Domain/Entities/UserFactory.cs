@@ -1,6 +1,8 @@
 ﻿using Alpha.Domain.Commands.Users;
 using Alpha.Framework.MediatR.EventSourcing.Entity;
 using Alpha.Framework.MediatR.Resources.Extensions;
+using System;
+using System.Linq;
 
 namespace Alpha.Domain.Entities
 {

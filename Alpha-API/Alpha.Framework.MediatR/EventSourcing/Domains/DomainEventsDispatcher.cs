@@ -1,6 +1,8 @@
 ﻿using Alpha.Framework.MediatR.EventSourcing.Entity;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Alpha.Framework.MediatR.EventSourcing.Domains
 {

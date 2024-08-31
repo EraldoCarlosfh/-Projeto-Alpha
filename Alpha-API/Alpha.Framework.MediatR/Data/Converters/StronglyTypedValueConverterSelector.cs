@@ -1,6 +1,8 @@
 ﻿using Alpha.Framework.MediatR.EventSourcing.Entity;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace Alpha.Framework.MediatR.Data.Converters
 {

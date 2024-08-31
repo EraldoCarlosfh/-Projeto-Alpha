@@ -1,6 +1,8 @@
 ﻿using Alpha.Domain.Entities;
 using Alpha.Framework.MediatR.Notifications;
 using MediatR;
+using System;
+using System.Collections.Generic;
 
 namespace Alpha.Domain.Commands.Users
 {

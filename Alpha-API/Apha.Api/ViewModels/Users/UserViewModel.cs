@@ -1,4 +1,5 @@
 ﻿using Alpha.Framework.MediatR.EventSourcing.Entity;
+using System;
 
 namespace Alpha.Api.ViewModels.Users
 {

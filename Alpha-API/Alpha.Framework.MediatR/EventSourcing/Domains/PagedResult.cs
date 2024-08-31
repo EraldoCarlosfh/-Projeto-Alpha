@@ -1,4 +1,6 @@
-﻿namespace Alpha.Framework.MediatR.EventSourcing.Domains
+﻿using System.Collections.Generic;
+
+namespace Alpha.Framework.MediatR.EventSourcing.Domains
 {
     public class PagedResult<T> where T : class
     {

@@ -1,4 +1,6 @@
-﻿namespace Alpha.Framework.MediatR.SecurityService.DataTransferObjects
+﻿using System;
+
+namespace Alpha.Framework.MediatR.SecurityService.DataTransferObjects
 {
     public class CreateTokenResponse
     {
