@@ -8,8 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Modules\" />
-    <Folder Include="Queries\" />
+    <Folder Include="Queries\Products\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Alpha.Data\Alpha.Data.csproj" />
     <ProjectReference Include="..\Alpha.Domain\Alpha.Domain.csproj" />
+    <ProjectReference Include="..\Alpha.Integrations\Alpha.Integrations.csproj" />
   </ItemGroup>
 
 </Project>

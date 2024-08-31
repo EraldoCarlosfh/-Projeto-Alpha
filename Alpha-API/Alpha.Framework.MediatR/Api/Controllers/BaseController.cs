@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Text;
+using Alpha.Framework.MediatR.EventSourcing.Domains;
 
 namespace Alpha.Framework.MediatR.Api.Controllers
 {

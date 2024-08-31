@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <Folder Include="Configurations\Products\" />
-    <Folder Include="Modules\" />
   </ItemGroup>
 
   <ItemGroup>

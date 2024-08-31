@@ -23,12 +23,8 @@
     <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="8.0.8" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
+    <PackageReference Include="Otp.NET" Version="1.2.2" />
     <PackageReference Include="TimeZoneConverter" Version="6.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="EventSourcing\Responses\" />
-    <Folder Include="EventSourcing\Validators\" />
   </ItemGroup>
 
 </Project>
