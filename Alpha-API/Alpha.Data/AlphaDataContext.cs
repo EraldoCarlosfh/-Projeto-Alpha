@@ -38,7 +38,7 @@ namespace Alpha.Data
 
             // Build config
             IConfiguration config = new ConfigurationBuilder()
-                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../Apha.Api"))
+                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../Alpha.Api"))
                 .AddJsonFile($"appsettings.{environmentName}.json", optional: false, reloadOnChange: true)
                 .Build();
 
