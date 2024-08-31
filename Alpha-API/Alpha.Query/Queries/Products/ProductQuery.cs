@@ -63,7 +63,7 @@ namespace Alpha.Query.Queries.Users
                     .FirstOrDefaultAsync(x => x.Id == id && x.IsActive);
             }
 
-            public async Task<PagedSearchResult> ListProducts(PagedSearchRequest request)
+            public async Task<PagedSearchResult> ListPageProducts(PagedSearchRequest request)
             {
                 var globarFilter = request?.GlobalFilter?.ToLower();
 
