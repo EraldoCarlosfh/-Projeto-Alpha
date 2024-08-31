@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.OpenApi.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Net;
 using System.Reflection;
 using Alpha.Framework.MediatR.IoC;
@@ -11,6 +10,12 @@ using Alpha.Framework.MediatR.EventSourcing.Modules;
 using Alpha.Framework.MediatR.SecurityService.Modules;
 using Alpha.Framework.MediatR.SecurityService.Configurations;
 using Alpha.Domain.Entities;
+using Alpha.Framework.MediatR.Data.Converters;
+using Microsoft.EntityFrameworkCore;
+using Alpha.Data.Modules;
+using Alpha.Query.Modules;
+using Alpha.Domain.Configurations;
+using Alpha.Api.Mappings;
 
 namespace Alpha.Api
 {
@@ -29,20 +34,16 @@ namespace Alpha.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // Entity Framework
-            services.AddEntityFrameworkNpgsql()
-                .AddDbContext<Data.OctaDataContext>(options =>
+            services.AddEntityFrameworkSqlServer()
+                .AddDbContext<Data.AlphaDataContext>(options =>
                 {
                     options
-                        .UseNpgsql(Configuration.GetConnectionString("SQLConnection"))
+                        .UseSqlServer(Configuration.GetConnectionString("SQLConnection"))
                         .ReplaceService<IValueConverterSelector, StronglyTypedValueConverterSelector>();
 
 
                 }, ServiceLifetime.Scoped);
 
-            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
-            // Cors
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -52,40 +53,26 @@ namespace Alpha.Api
                                       .AllowAnyHeader()
                                       .AllowAnyMethod();
                                   });
-
-                options.AddPolicy(name: MySignalR,
-                                  builder => builder
-                                  .AllowAnyMethod()
-                                  .AllowAnyHeader()
-                                  .AllowCredentials()
-                                  .SetIsOriginAllowed(hostName => true));
             });
 
-            // Adding Context Settings Configuration
             var contextSettings = Configuration.GetSection("ContextSettings").Get<ContextSettingsConfiguration>();
             services.AddSingleton(contextSettings);       
 
-            // Adding Framework Services
             services.ConfigureMediator(_assembly, Configuration.GetConnectionString("SQLConnection"));
             services.ConfigureSecurityService(Configuration.GetSection("Token").Get<TokenConfiguration>());
 
-            // AutoMapper
             services.ConfigureAutoMapper();
 
-            // Dependency Injection Configurations            
             services.ConfigureData();
             services.ConfigureQuery();
 
-            // Get Environment Name
             var envName = Configuration.GetSection("EnvironmentName").Value;
             var versionName = Configuration.GetSection("VersionName").Value;
 
-            // Enable Swagger   
             services.AddSwaggerGen(swagger =>
             {
                 swagger.CustomSchemaIds(type => type.ToString());
 
-                //This is to generate the Default UI of Swagger Documentation  
                 swagger.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = versionName,
@@ -93,7 +80,6 @@ namespace Alpha.Api
                     Description = "Servicos da Plataforma Octa Tech",
                 });
 
-                // To Enable authorization using Swagger (JWT)  
                 swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
                     Name = "Authorization",
@@ -120,10 +106,8 @@ namespace Alpha.Api
             });
 
 
-            // Helthchecks
             services.AddHealthChecks();
 
-            // Controllers
             services.AddControllers(options =>
             {
                 var policy = new AuthorizationPolicyBuilder()
@@ -143,11 +127,8 @@ namespace Alpha.Api
             });
 
             services.AddOptions();
-
             services.AddHealthChecks();
-
-            services.AddHttpClient();           
-
+            services.AddHttpClient();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
@@ -176,7 +157,7 @@ namespace Alpha.Api
 
                         await context.Response.WriteAsync("<a href=\"/\">Home</a><br>\r\n");
                         await context.Response.WriteAsync("</body></html>\r\n");
-                        await context.Response.WriteAsync(new string(' ', 512)); // IE padding
+                        await context.Response.WriteAsync(new string(' ', 512));
                     });
                 });
                 app.UseHsts();
@@ -187,11 +168,8 @@ namespace Alpha.Api
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseCors(MyAllowSpecificOrigins);
-
             app.UseAuthentication();
             app.UseAuthorization();
 
