@@ -58,9 +58,8 @@ namespace Alpha.Domain.Commands.Users
 
             var user = await _userQuery.GetUserByEmail(command.Email);
 
-            if (user != null) {
+            if (user != null)
                 return ValidationErrors(command.AddNotification(new Notification("Cadastro", "E-mail já cadastrado na base de dados.")));
-            }
 
             user = User.Create(
                 command,

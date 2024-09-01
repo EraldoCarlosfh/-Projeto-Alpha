@@ -41,11 +41,14 @@ namespace Alpha.Domain.Commands.Users
         }
 
         protected override async Task<ICommandResult<Product>> HandleRequest(DeleteProductCommand command, CancellationToken cancellationToken)
-        {
+            {
             if (!command.IsValid())
                 return ValidationErrors(command.Notifications);
 
             var product = await _productRepository.GetById(command.ProductId.ToEntityId());
+
+            if (product == null)
+                return ValidationErrors(command.AddNotification(new Notification("Produto", "Não existe produto com o Id informado.")));
 
             product.UpdateActivated(false);
 

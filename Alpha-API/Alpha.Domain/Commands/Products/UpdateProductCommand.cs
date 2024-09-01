@@ -51,6 +51,9 @@ namespace Alpha.Domain.Commands.Users
 
             var product = await _productRepository.GetById(command.Id.ToEntityId());
 
+            if (product == null)
+                return ValidationErrors(command.AddNotification(new Notification("Produto", "Não existe produto com o Id informado.")));
+
             product.Update(command);
 
             await _productRepository.UpdateAsync(product);
