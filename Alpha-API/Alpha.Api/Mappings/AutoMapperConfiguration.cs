@@ -1,4 +1,5 @@
-﻿using Alpha.Api.Mappings.Users;
+﻿using Alpha.Api.Mappings.Products;
+using Alpha.Api.Mappings.Users;
 using Alpha.Domain.Configurations;
 using Alpha.Framework.MediatR.SecurityService.Models;
 using Alpha.Integrations.Encryption;
@@ -18,6 +19,7 @@ namespace Alpha.Api.Mappings
                 var contextSettings = provider.GetService<ContextSettingsConfiguration>();
               
                 cfg.AddProfile(new UserMappingProfile(encryptionService));
+                cfg.AddProfile(new ProductMappingProfile());
             }).CreateMapper());
         }
     }
