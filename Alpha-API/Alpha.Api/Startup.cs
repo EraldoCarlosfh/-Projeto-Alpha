@@ -178,7 +178,7 @@ namespace Alpha.Api
 
                 // Enable Swagger
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint(url: "/swagger/v1/swagger.json", name: "Aplha.Api"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint(url: "/swagger/v1/swagger.json", name: "Alpha.Api"));
             }
 
             app.UseRouting();

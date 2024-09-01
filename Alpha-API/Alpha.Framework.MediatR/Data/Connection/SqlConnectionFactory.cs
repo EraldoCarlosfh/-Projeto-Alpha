@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -18,7 +19,8 @@ namespace Alpha.Framework.MediatR.Data.Connection
         {
             if (this._connection == null || this._connection.State != ConnectionState.Open)
             {
-                this._connection = new SqlConnection(_connectionString);
+                //this._connection = new SqlConnection(_connectionString);
+                this._connection = new NpgsqlConnection(_connectionString);
                 this._connection.Open();
             }
 

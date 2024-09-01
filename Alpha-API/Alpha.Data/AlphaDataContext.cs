@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Alpha.Data.Configurations.Users;
+using Alpha.Data.Configurations.Products;
 using Alpha.Framework.MediatR.Data.Converters;
 using System;
 using System.IO;
@@ -43,7 +44,8 @@ namespace Alpha.Data
                 .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder<AlphaDataContext>();
-            optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"), builder =>
+            //optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"), builder =>
+            optionsBuilder.UseNpgsql(config.GetConnectionString("DefaultConnection"), builder =>
             {
                 builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
             });
