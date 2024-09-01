@@ -23,7 +23,7 @@ namespace Alpha.Framework.MediatR.Data.Queries
 
                 var pagedSearchResult = new PagedSearchResult()
                 {
-                    SearchResult = await list.AsNoTracking().ToListAsync(),
+                    SearchResult = list.AsNoTracking().ToList(),
                     TotalRecords = count,
                     PageIndex = pagedSearchRequest.PageIndex,
                     PageCount = count / pagedSearchRequest.PageSize,
@@ -53,7 +53,7 @@ namespace Alpha.Framework.MediatR.Data.Queries
             {
                 var pagedSearchResult = new PagedSearchResult()
                 {
-                    SearchResult = await list.AsNoTracking().ToListAsync(),
+                    SearchResult = list.AsNoTracking().ToList(),
                     TotalRecords = list.Count(),
                     PageIndex = pagedSearchRequest.PageIndex,
                     PageCount = list.Count() / pagedSearchRequest.PageSize,

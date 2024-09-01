@@ -14,7 +14,7 @@ namespace Alpha.Framework.MediatR.EventSourcing.Domains
     {
         Ascending = 1,
         Descending = 2,
-        LowerValue = 4,
-        MoreValue = 5
+        MoreValue = 3,
+        LowerValue = 4
     }
 }
