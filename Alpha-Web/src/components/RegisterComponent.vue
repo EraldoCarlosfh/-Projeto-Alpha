@@ -11,12 +11,30 @@
       <h2
         class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
       >
-        LOGIN
+        CADASTRO
       </h2>
     </div>
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form class="space-y-6" @submit.prevent="login">
+      <form class="space-y-6" @submit.prevent="userRegister">
+        <div>
+          <label class="block text-sm font-medium leading-6 text-gray-900"
+            >Nome Completo</label
+          >
+          <div class="mt-2">
+            <input
+              id="fullname"
+              name="fullname"
+              type="text"
+              v-model="form.fullName"
+              @blur="validateFullName"
+              required=""
+              class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+            <span v-if="errors.fullName">{{ errors.fullName }}</span>
+          </div>
+        </div>
+
         <div>
           <label class="block text-sm font-medium leading-6 text-gray-900"
             >E-mail</label
@@ -62,14 +80,14 @@
             :disabled="!isFormValid"
             class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
-            Entrar
+            Cadastrar
           </button>
-          <router-link to="/cadastro-usuario">
+          <router-link to="/home">
             <button
               type="submit"
               class="mt-4 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              Cadastro
+              Voltar
             </button>
           </router-link>
         </div>
@@ -85,10 +103,12 @@ export default {
   data() {
     return {
       form: {
+        fullName: "",
         email: "",
         password: "",
       },
       errors: {
+        fullName: null,
         email: null,
         password: null,
       },
@@ -97,14 +117,25 @@ export default {
   computed: {
     isFormValid() {
       return (
+        !this.errors.fullName &&
         !this.errors.password &&
         !this.errors.email &&
+        this.form.fullName &&
         this.form.password &&
         this.form.email
       );
     },
   },
   methods: {
+    validateFullName() {
+      if (!this.form.fullName) {
+        this.errors.fullName = "O nome é obrigatório.";
+      } else if (this.form.fullName.length > 30) {
+        this.errors.fullName = "O nome deve conter no máximo 30 caracteres.";
+      } else {
+        this.errors.fullName = null;
+      }
+    },
     validatePassword() {
       if (!this.form.password) {
         this.errors.password = "A senha é obrigatória.";
@@ -124,19 +155,20 @@ export default {
         this.errors.email = null;
       }
     },
-    async login() {
+    async userRegister() {
       this.validatePassword();
+      this.validateFullName();
       this.validateEmail();
 
       try {
-        const user = await authService.login(this.form);
+        const user = await authService.createUser(this.form);
         if (user != null) {
           notify({
             title: "Sucesso!",
-            text: "Login efetuado com sucesso.",
+            text: "Cadastro efetuado com sucesso.",
             type: "success",
           });
-          this.$router.push("home");
+          this.$router.push("login");
         }
       } catch (error) {
         notify({

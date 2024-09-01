@@ -3,7 +3,7 @@ import axios from 'axios';
 const instance = axios.create({
   baseURL: 'https://localhost:44397/api',
   headers: {
-    Authorization: `Bearer ${localStorage.getItem("token").replace(/"/g, '')}`,
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
     'Content-Type': 'application/json'
   }
 });
@@ -20,6 +20,14 @@ export const productService = {
   update: async (product) => {
     try {
       const response = await instance.put('/products/update', product);
+      return response.data.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getById: async (productId) => {
+    try {
+      const response = await instance.get(`/products/${productId}`);
       return response.data.data;
     } catch (error) {
       throw error;

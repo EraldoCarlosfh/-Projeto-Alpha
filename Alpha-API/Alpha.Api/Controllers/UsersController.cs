@@ -44,7 +44,6 @@ namespace Alpha.Api.Controllers
 
         [HttpGet]
         [Route("{userId}")]
-        [AllowAnonymous]
         [ProducesResponseType(typeof(UserViewModel), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -189,7 +188,6 @@ namespace Alpha.Api.Controllers
 
         [HttpPut]
         [Route("activation")]
-        [AllowAnonymous]
         [ProducesResponseType(typeof(LoginResponseViewModel), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ActivateUser(ActivateUserCommand request)
@@ -201,7 +199,6 @@ namespace Alpha.Api.Controllers
 
         [HttpPut]
         [Route("new-terms-acceptance")]
-        [AllowAnonymous]
         [ProducesResponseType(typeof(LoginResponseViewModel), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ActivateUser(AcceptNewUserTermsCommand request)

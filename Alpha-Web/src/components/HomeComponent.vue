@@ -3,9 +3,7 @@
     <NavBarComponent />
     <header class="bg-white shadow">
       <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold tracking-tight text-gray-900">
-          Produtos
-        </h1>
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900">Home</h1>
       </div>
     </header>
     <main>
@@ -23,7 +21,11 @@
           <DropdownComponent @order-selected="handleOptionSelected" />
         </div>
         <p v-if="loading">Loading...</p>
-        <ProductsListComponent :products="productsList" v-else />
+        <ProductsListComponent
+          :searchResult="searchResults"
+          :products="productsList"
+          v-else
+        />
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
       </div>
     </main>
@@ -46,6 +48,12 @@ export default {
   data() {
     return {
       productsList: [],
+      searchResults: {
+        pageCount: 0,
+        pageIndex: 0,
+        pageSize: 0,
+        totalRecords: 0,
+      },
       loading: true,
       errorMessage: null,
     };
@@ -54,6 +62,12 @@ export default {
     await this.fetchProducts();
   },
   methods: {
+    mountedSearchResults(response) {
+      this.searchResults.pageCount = response.pageCount;
+      this.searchResults.pageIndex = response.pageIndex;
+      this.searchResults.pageSize = response.pageSize;
+      this.searchResults.totalRecords = response.totalRecords;
+    },
     async fetchProducts(value = 1) {
       this.productsList = [];
       const requestPayload = {
@@ -65,6 +79,7 @@ export default {
       try {
         const response = await productService.listPage(requestPayload);
         this.productsList = response.searchResult;
+        this.mountedSearchResults(response);
       } catch (error) {
         this.errorMessage = error.message;
         notify({

@@ -68,7 +68,7 @@ namespace Alpha.Framework.MediatR.SecurityService.Modules
                     if (authKey != null)
                     {
                         var tokenContent = headers[authKey].ToString().Replace("bearer ", "", StringComparison.InvariantCultureIgnoreCase);
-                        var token = new JwtSecurityToken(tokenContent);
+                        var token = new JwtSecurityToken(tokenContent.Replace("\"", ""));
 
                         if (token != null)
                         {

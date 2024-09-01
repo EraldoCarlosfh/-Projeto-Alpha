@@ -10,6 +10,23 @@
               alt="Alpha"
             />
           </div>
+          <div class="hidden md:block">
+            <div class="ml-10 flex items-baseline space-x-4">
+              <a
+                v-for="item in navigation"
+                :key="item.name"
+                :href="item.href"
+                :class="[
+                  item.current
+                    ? 'bg-gray-900 text-white'
+                    : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                  'rounded-md px-3 py-2 text-sm font-medium',
+                ]"
+                :aria-current="item.current ? 'page' : undefined"
+                >{{ item.name }}</a
+              >
+            </div>
+          </div>
         </div>
         <div class="hidden md:block">
           <div class="ml-4 flex items-center md:ml-6">
@@ -72,6 +89,22 @@
     </div>
 
     <DisclosurePanel class="md:hidden">
+      <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
+        <DisclosureButton
+          v-for="item in navigation"
+          :key="item.name"
+          as="a"
+          :href="item.href"
+          :class="[
+            item.current
+              ? 'bg-gray-900 text-white'
+              : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+            'block rounded-md px-3 py-2 text-base font-medium',
+          ]"
+          :aria-current="item.current ? 'page' : undefined"
+          >{{ item.name }}</DisclosureButton
+        >
+      </div>
       <div class="border-t border-gray-700 pb-3 pt-4">
         <div class="flex items-center px-5">
           <div class="flex-shrink-0">
@@ -114,12 +147,18 @@ import {
 import { Bars3Icon, XMarkIcon } from "@heroicons/vue/24/outline";
 import { authService } from "../services/authService";
 
+const userLogged = JSON.parse(localStorage.getItem("user"));
+
 const user = {
-  name: "Eraldo Oliveira",
-  email: "eraldo@oliveira.com",
+  name: userLogged.user.fullName,
+  email: userLogged.user.email,
   imageUrl:
     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
 };
+const navigation = [
+  { name: "Home", href: "/home", current: true },
+  { name: "Cadastro", href: "/cadastro", current: false },
+];
 const userNavigation = [{ name: "Sair", href: "/login" }];
 
 function logout() {

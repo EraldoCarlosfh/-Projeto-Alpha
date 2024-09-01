@@ -42,7 +42,6 @@ namespace Alpha.Api.Controllers
 
         [HttpGet]
         [Route("{productId}")]
-        [AllowAnonymous]
         [ProducesResponseType(typeof(ProductViewModel), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -84,7 +83,6 @@ namespace Alpha.Api.Controllers
 
         [HttpPost]
         [Route("new-product")]
-        [AllowAnonymous]
         [ProducesResponseType(typeof(ProductViewModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateNewProduct(CreateProductCommand request)
         {

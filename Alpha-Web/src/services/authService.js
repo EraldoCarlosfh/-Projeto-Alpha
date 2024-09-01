@@ -9,9 +9,17 @@ export const authService = {
     try {
       const response = await instance.post('/users/login', userLogin);
       if (response.data.data.token) {
-        localStorage.setItem('token', JSON.stringify(response.data.data.token));
+        localStorage.setItem('token', JSON.stringify(token));
         localStorage.setItem('user', JSON.stringify(response.data.data));
       }
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  createUser: async (user) => {
+    try {
+      const response = await instance.post('/users/new-user', user);
       return response.data;
     } catch (error) {
       throw error;

@@ -78,7 +78,7 @@ namespace Alpha.Domain.Commands.Users
             var response = new LoginUserResponse()
             {
                 ExpirationDate = tokenResponse.ExpirationDate,
-                Token = tokenResponse.Token,
+                Token = tokenResponse.Token.Replace("\"", ""),
                 User = user,
                 UserId = user.Id.ToString(),
                 PasswordErrorsAllowed = user.PasswordErrorsAllowed,

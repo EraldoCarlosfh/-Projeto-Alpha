@@ -4,13 +4,13 @@
     <header class="bg-white shadow">
       <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <h1 class="text-3xl font-bold tracking-tight text-gray-900">
-          Cadastro de Produto
+          {{ isEditMode ? "Editar Produto" : "Cadastro Produto" }}
         </h1>
       </div>
     </header>
     <main>
       <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <form>
+        <form @submit.prevent="productRegister">
           <div class="space-y-12">
             <div class="pb-12">
               <h2 class="text-base font-semibold leading-7 text-gray-900">
@@ -72,6 +72,7 @@
                       type="text"
                       v-model="form.name"
                       @blur="validateName"
+                      placeholder="Digite o nome do produto"
                       class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                     <span class="span-error" v-if="errors.name">{{
@@ -88,12 +89,14 @@
                   <div class="mt-2">
                     <input
                       type="text"
-                      v-model="form.barcode"
-                      @blur="validateBarcode"
+                      v-model="form.barCode"
+                      @blur="validateBarCode"
+                      @input="onlyNumbers"
+                      placeholder="Digite o código de barras"
                       class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
-                    <span class="span-error" v-if="errors.barcode">{{
-                      errors.barcode
+                    <span class="span-error" v-if="errors.barCode">{{
+                      errors.barCode
                     }}</span>
                   </div>
                 </div>
@@ -103,14 +106,23 @@
                     class="block text-sm font-medium leading-6 text-gray-900"
                     >Preço R$</label
                   >
-                  <div class="mt-2">
+                  <div class="relative mt-2 rounded-md shadow-sm">
+                    <div
+                      :class="{
+                        'pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2': true,
+                        'bottom-0': errors.price > 0,
+                        'bottom-6': errors.price != null,
+                      }"
+                    >
+                      <span class="text-gray-500 sm:text-sm">R$</span>
+                    </div>
                     <input
                       type="text"
-                      v-mask="'#0,00'"
-                      v-model="price"
-                      @blur="updatePrice()"
-                      placeholder="Digite um valor"
-                      class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      v-model="formattedValue"
+                      @blur="validatePrice"
+                      @input="formatCurrency"
+                      placeholder="0.00"
+                      class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                     <span class="span-error" v-if="errors.price">{{
                       errors.price
@@ -123,19 +135,27 @@
 
           <div class="mt-6 flex items-center justify-end gap-x-6">
             <button
+              v-if="!isEditMode"
               type="button"
               @click="handleCancel"
               class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
             >
-              Cancelar
+              Limpar
             </button>
+            <router-link to="/home" v-else>
+              <button
+                type="button"
+                class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              >
+                Voltar
+              </button>
+            </router-link>
             <button
               type="submit"
               :disabled="!isFormValid"
-              @click="submitForm"
               class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              Cadastrar
+              {{ isEditMode ? "Atualizar" : "Cadastrar" }}
             </button>
           </div>
         </form>
@@ -145,9 +165,8 @@
 </template>
 
 <script>
-import axios from "axios";
 import { notify } from "@kyvg/vue3-notification";
-import NavBarComponent from "./NavBarComponent.vue";
+import NavBarComponent from "../shared/NavBarComponent.vue";
 import { productService } from "../services/productService";
 
 export default {
@@ -157,50 +176,74 @@ export default {
   data() {
     return {
       form: {
+        id: "",
         name: "",
-        price: "0",
-        barcode: "",
+        price: 0,
+        barCode: "",
         image: "https://i.pravatar.cc",
       },
       errors: {
         name: null,
         price: null,
-        barcode: null,
+        barCode: null,
       },
       product: {
+        id: "",
         name: "",
         price: 0,
-        barcode: "",
+        barCode: "",
         image: "https://i.pravatar.cc",
       },
-      price: "0",
+      formattedValue: "",
     };
   },
   computed: {
+    isEditMode() {
+      return !!this.$route.params.id;
+    },
     isFormValid() {
       return (
         !this.errors.name &&
         !this.errors.price &&
-        !this.errors.barcode &&
+        !this.errors.barCode &&
         this.form.name &&
         this.form.price &&
-        this.form.barcode
+        this.form.barCode
       );
     },
-    formattedPrice() {
-      return new Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }).format(parseFloat(this.price.replace(",", ".")));
+    formatCurrency() {
+      let value = this.formattedValue.replace(/[^0-9,]/g, "");
+
+      let parts = value.split(",");
+      if (parts.length > 2) {
+        value = parts[0] + "," + parts[1].slice(0, 2);
+      }
+      this.formattedValue = value;
+      this.form.price = parseFloat(value.replace(",", "."));
     },
   },
+  async created() {
+    if (this.isEditMode) {
+      await this.fetchItemData(this.$route.params.id);
+    }
+  },
   methods: {
+    async fetchItemData(productId) {
+      const response = await productService.getById(productId);
+      this.form = response;
+      this.formattedValue = response.price;
+    },
     handleCancel() {
       (this.form.name = ""),
-        (this.form.price = "0"),
-        (this.price = "0"),
-        (this.form.barcode = ""),
+        (this.form.price = ""),
+        (this.formattedValue = ""),
+        (this.form.barCode = ""),
         (this.form.image = null);
+    },
+    onlyNumbers(event) {
+      const valor = event.target.value;
+      event.target.value = valor.replace(/[^0-9]/g, "");
+      this.form.barCode = event.target.value;
     },
     validateName() {
       if (!this.form.name) {
@@ -213,22 +256,21 @@ export default {
       }
     },
     validatePrice() {
-      if (!this.form.price) {
+      if (!this.formattedValue) {
         this.errors.price = "O valor é obrigatório.";
-      } else if (this.form.price == 0) {
+      } else if (this.formattedValue == 0) {
         this.errors.price = "O valor deve ser maior que 0.";
       } else {
         this.errors.price = null;
       }
     },
-    validateBarcode() {
-      if (!this.form.barcode) {
-        this.errors.barcode = "Código de barras é obrigatório.";
-      } else if (this.form.barcode.length < 6) {
-        this.errors.barcode =
-          "Código de barras deve conter pelo menos 6 caracteres.";
+    validateBarCode() {
+      if (!this.form.barCode) {
+        this.errors.barCode = "Código de barras é obrigatório.";
+      } else if (this.form.barCode.length != 8) {
+        this.errors.barCode = "Código de barras deve conter 8 números.";
       } else {
-        this.errors.barcode = null;
+        this.errors.barCode = null;
       }
     },
     handleFileChange(event) {
@@ -244,26 +286,47 @@ export default {
         this.price = this.formattedPrice;
       }
     },
-    async submitForm() {
+    async productRegister() {
       this.product = { ...this.form };
-      this.product.price = this.product.price.replace("R$", ",", ".");
 
-      try {
-        const response = await productService.create(this.product);
-        notify({
-          title: "Sucesso!",
-          text: "Produto cadastrado com sucesso.",
-          type: "success",
-        });
-      } catch (error) {
-        this.errorMessage = error.message;
-        notify({
-          title: error.code,
-          text: error.message,
-          type: "error",
-        });
-      } finally {
-        this.loading = false;
+      if (this.isEditMode) {
+        try {
+          await productService.update(this.product);
+          notify({
+            title: "Sucesso!",
+            text: `Produto: ${this.product.name} atualizado com sucesso.`,
+            type: "success",
+          });
+          this.$router.push("/home");
+        } catch (error) {
+          this.errorMessage = error.message;
+          notify({
+            title: error.code,
+            text: error.message,
+            type: "error",
+          });
+        } finally {
+          this.loading = false;
+        }
+      } else {
+        try {
+          const response = await productService.create(this.product);
+          notify({
+            title: "Sucesso!",
+            text: `Produto: ${response.name} cadastrado com sucesso.`,
+            type: "success",
+          });
+          this.$router.push("/home");
+        } catch (error) {
+          this.errorMessage = error.message;
+          notify({
+            title: error.code,
+            text: error.message,
+            type: "error",
+          });
+        } finally {
+          this.loading = false;
+        }
       }
     },
 
