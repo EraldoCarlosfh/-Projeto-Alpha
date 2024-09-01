@@ -72,7 +72,8 @@ namespace Alpha.Query.Queries.Users
                 var query = _dataContext.Products.Where(x => x.IsActive);
 
                 if (!globarFilter.IsNullOrEmpty())
-                    query = query.Where(c => globarFilter.Contains(c.Name.ToLower()));
+                    query = query.Where(c => c.Name.ToLower().Contains(globarFilter.ToLower()) ||
+                                             c.BarCode.Contains(globarFilter));
 
                 query = FilterProducts(query, request);
 

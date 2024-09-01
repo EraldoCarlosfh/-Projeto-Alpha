@@ -7,10 +7,12 @@ import { VueMaskDirective } from 'v-mask';
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import Paginator from 'primevue/paginator';
+import InputText from 'primevue/inputtext';
 
 const app = createApp(App);
 
 app.component('Paginator', Paginator);
+app.component('InputText', InputText);
 app.use(router);
 app.directive('mask', VueMaskDirective);
 app.use(Notifications);

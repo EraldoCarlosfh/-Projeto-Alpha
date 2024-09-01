@@ -7,19 +7,25 @@
       </div>
     </header>
     <main>
+      <div class="card flex flex-wrap justify-center gap-4 mt-8">
+        <InputText
+          class="w-[62%] input-text"
+          @blur="setGlobalFilter($event)"
+          placeholder="Informe o produto ou código"
+        />
+        <button
+          type="button"
+          @click="clearSearch()"
+          class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-1"
+        >
+          Limpar Pesquisa
+        </button>
+        <DropdownComponent
+          class="h-50"
+          @order-selected="handleOptionSelected"
+        />
+      </div>
       <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row gap-4 justify-between">
-          <span class="sm:ml-3">
-            <button
-              type="button"
-              @click="redirectRegister"
-              class="inline-flex items-center rounded-md bg-slate-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600"
-            >
-              + Cadastrar
-            </button>
-          </span>
-          <DropdownComponent @order-selected="handleOptionSelected" />
-        </div>
         <p v-if="loading">Loading...</p>
         <ProductsListComponent :products="productsList" v-else />
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
@@ -42,6 +48,7 @@ import NavBarComponent from "../shared/NavBarComponent.vue";
 import DropdownComponent from "../shared/DropdownComponent.vue";
 import { productService } from "../services/productService";
 
+let globalFilter = "";
 let order = 0;
 let page = 0;
 
@@ -79,7 +86,7 @@ export default {
     async fetchProducts() {
       this.productsList = [];
       const requestPayload = {
-        globalFilter: "",
+        globalFilter: globalFilter,
         order: order,
         pageIndex: page,
         pageSize: 8,
@@ -98,6 +105,20 @@ export default {
       } finally {
         this.loading = false;
       }
+    },
+
+    async clearSearch() {
+      globalFilter = "";
+      const input = document.querySelector(".input-text");
+      if (input) {
+        input.value = "";
+      }
+      await this.fetchProducts();
+    },
+
+    async setGlobalFilter(event) {
+      globalFilter = event.currentTarget.value;
+      await this.fetchProducts();
     },
 
     async handleOptionSelected(value) {

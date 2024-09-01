@@ -233,6 +233,7 @@ export default {
       this.form = response;
       this.formattedValue = response.price;
     },
+
     handleCancel() {
       (this.form.name = ""),
         (this.form.price = ""),
@@ -240,11 +241,13 @@ export default {
         (this.form.barCode = ""),
         (this.form.image = null);
     },
+
     onlyNumbers(event) {
       const valor = event.target.value;
       event.target.value = valor.replace(/[^0-9]/g, "");
       this.form.barCode = event.target.value;
     },
+
     validateName() {
       if (!this.form.name) {
         this.errors.name = "O nome do produto é obrigatório.";
@@ -255,6 +258,7 @@ export default {
         this.errors.name = null;
       }
     },
+
     validatePrice() {
       if (!this.formattedValue) {
         this.errors.price = "O valor é obrigatório.";
@@ -264,6 +268,7 @@ export default {
         this.errors.price = null;
       }
     },
+
     validateBarCode() {
       if (!this.form.barCode) {
         this.errors.barCode = "Código de barras é obrigatório.";
@@ -273,12 +278,14 @@ export default {
         this.errors.barCode = null;
       }
     },
+
     handleFileChange(event) {
       const file = event.target.files[0];
       if (file) {
         this.form.image = file;
       }
     },
+
     updatePrice() {
       this.validatePrice();
       if (this.form.price != 0 || this.form.price != NaN) {
@@ -286,6 +293,7 @@ export default {
         this.price = this.formattedPrice;
       }
     },
+
     async productRegister() {
       this.product = { ...this.form };
 
@@ -311,6 +319,7 @@ export default {
       } else {
         try {
           const response = await productService.create(this.product);
+          this.productRegisterFakeStore(response);
           notify({
             title: "Sucesso!",
             text: `Produto: ${response.name} cadastrado com sucesso.`,
@@ -328,6 +337,27 @@ export default {
           this.loading = false;
         }
       }
+    },
+
+    productRegisterFakeStore(product) {
+      fetch("https://fakestoreapi.com/products", {
+        method: "POST",
+        body: JSON.stringify({
+          title: product.name,
+          price: product.price,
+          description: product.barCode,
+          image: "https://i.pravatar.cc",
+          category: product.id,
+        }),
+      }).then((res) => {
+        if (res.ok) {
+          notify({
+            title: "Sucesso!",
+            text: `Produto: ${product.name} cadastrado em Fake Store API.`,
+            type: "success",
+          });
+        }
+      });
     },
 
     redirectHome() {
