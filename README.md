@@ -1,4 +1,4 @@
-[![img]([https://github.com/EraldoCarlosfh/ApiRest-StarWars/raw/main/img/sw.jpg](https://github.com/EraldoCarlosfh/Projeto-Alpha/blob/main/Alpha-Api.jpg)
+[![img]([https://github.com/EraldoCarlosfh/Projeto-Alpha/blob/main/Alpha-Api.jpg](https://github.com/EraldoCarlosfh/Projeto-Alpha/blob/main/Alpha-Api.jpg)
 
 # 	API REST PROJETO ALPHA - ERALDO CARLOS
 
@@ -34,8 +34,8 @@ altera em Password a SenhaBanco para senha que você definiu.
 
 Finalizado todo este processo volte para a aplicação frontend cadastre um usuário e logue o sistema.
 
-https://github.com/EraldoCarlosfh/Projeto-Alpha/blob/main/Alpha-Front-3.jpg
-https://github.com/EraldoCarlosfh/Projeto-Alpha/blob/main/Alpha-Front-4.jpg
-https://github.com/EraldoCarlosfh/Projeto-Alpha/blob/main/Alpha-Front-1.jpg
-https://github.com/EraldoCarlosfh/Projeto-Alpha/blob/main/Alpha-Front-2.jpg
+[![img]([https://github.com/EraldoCarlosfh/Projeto-Alpha/blob/main/Alpha-Front-3.jpg](https://github.com/EraldoCarlosfh/Projeto-Alpha/blob/main/Alpha-Front-3.jpg)
+[![img]([https://github.com/EraldoCarlosfh/Projeto-Alpha/blob/main/Alpha-Front-4.jpg](https://github.com/EraldoCarlosfh/Projeto-Alpha/blob/main/Alpha-Front-4.jpg)
+[![img]([https://github.com/EraldoCarlosfh/Projeto-Alpha/blob/main/Alpha-Front-1.jpg](https://github.com/EraldoCarlosfh/Projeto-Alpha/blob/main/Alpha-Front-1.jpg)
+[![img]([https://github.com/EraldoCarlosfh/Projeto-Alpha/blob/main/Alpha-Front-2.jpg](https://github.com/EraldoCarlosfh/Projeto-Alpha/blob/main/Alpha-Front-2.jpg)
 
