@@ -3,7 +3,6 @@ import LoginComponent from '../components/LoginComponent.vue';
 import HomeComponent from '../components/HomeComponent.vue';
 import ProductRegisterComponent from '../components/ProductRegisterComponent.vue';
 import RegisterComponent from '../components/RegisterComponent.vue';
-import DialogComponent from '../components/DialogComponent.vue';
 
 const routes = [
   {
@@ -25,11 +24,6 @@ const routes = [
     name: 'Home',
     meta: { requiresAuth: true },
     component: HomeComponent,
-  },
-  {
-    path: '/dialog',
-    name: 'Dialog',
-    component: DialogComponent,
   },
   {
     path: '/cadastro/:id?',

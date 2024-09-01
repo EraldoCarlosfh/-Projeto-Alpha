@@ -21,12 +21,15 @@
           <DropdownComponent @order-selected="handleOptionSelected" />
         </div>
         <p v-if="loading">Loading...</p>
-        <ProductsListComponent
-          :searchResult="searchResults"
-          :products="productsList"
-          v-else
-        />
+        <ProductsListComponent :products="productsList" v-else />
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+      </div>
+      <div class="card mb-4">
+        <Paginator
+          :rows="searchResult.pageSize"
+          @page="handlePageSelected($event)"
+          :totalRecords="searchResult.totalRecords"
+        ></Paginator>
       </div>
     </main>
   </div>
@@ -39,6 +42,9 @@ import NavBarComponent from "../shared/NavBarComponent.vue";
 import DropdownComponent from "../shared/DropdownComponent.vue";
 import { productService } from "../services/productService";
 
+let order = 0;
+let page = 0;
+
 export default {
   components: {
     ProductsListComponent,
@@ -48,7 +54,7 @@ export default {
   data() {
     return {
       productsList: [],
-      searchResults: {
+      searchResult: {
         pageCount: 0,
         pageIndex: 0,
         pageSize: 0,
@@ -59,27 +65,29 @@ export default {
     };
   },
   async mounted() {
+    order = 0;
+    page = 0;
     await this.fetchProducts();
   },
   methods: {
-    mountedSearchResults(response) {
-      this.searchResults.pageCount = response.pageCount;
-      this.searchResults.pageIndex = response.pageIndex;
-      this.searchResults.pageSize = response.pageSize;
-      this.searchResults.totalRecords = response.totalRecords;
+    mountedSearchResult(response) {
+      this.searchResult.pageCount = response.pageCount;
+      this.searchResult.pageIndex = response.pageIndex;
+      this.searchResult.pageSize = response.pageSize;
+      this.searchResult.totalRecords = response.totalRecords;
     },
-    async fetchProducts(value = 1) {
+    async fetchProducts() {
       this.productsList = [];
       const requestPayload = {
         globalFilter: "",
-        order: value,
-        pageIndex: 0,
-        pageSize: 10,
+        order: order,
+        pageIndex: page,
+        pageSize: 8,
       };
       try {
         const response = await productService.listPage(requestPayload);
         this.productsList = response.searchResult;
-        this.mountedSearchResults(response);
+        this.mountedSearchResult(response);
       } catch (error) {
         this.errorMessage = error.message;
         notify({
@@ -93,21 +101,17 @@ export default {
     },
 
     async handleOptionSelected(value) {
-      await this.fetchProducts(value);
+      order = value;
+      await this.fetchProducts();
+    },
+
+    async handlePageSelected(value) {
+      page = value.page;
+      await this.fetchProducts();
     },
 
     redirectRegister() {
       this.$router.push("/cadastro");
-    },
-  },
-  computed: {
-    OrderingOption() {
-      return {
-        Ascending: 1,
-        Descending: 2,
-        MoreValue: 3,
-        LowerValue: 4,
-      };
     },
   },
 };

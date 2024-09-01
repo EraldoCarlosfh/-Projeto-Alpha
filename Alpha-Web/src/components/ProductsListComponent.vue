@@ -24,7 +24,6 @@
             class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80"
           >
             <img
-              @click="openModal(product.id, product.name)"
               :src="product.image"
               class="h-full w-full object-cover object-center lg:h-full lg:w-full"
             />
@@ -39,38 +38,41 @@
               <p class="mt-1 text-sm text-gray-500">
                 Cód: {{ product.barCode }}
               </p>
-            </div>
-            <div>
               <p class="text-sm font-medium text-gray-900">
                 {{ formattedPrice(product.price) }}
               </p>
-              <span class="sm:block mt-1">
+            </div>
+            <div class="">
+              <span class="sm:block mt-1 ml-1">
                 <router-link :to="`/cadastro/` + product.id">
                   <button
                     type="button"
-                    class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                    class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-1"
                   >
                     Editar
                   </button>
                 </router-link>
+              </span>
+              <span class="sm:block mt-1">
+                <button
+                  type="button"
+                  @click="openModal(product.id, product.name)"
+                  class="inline-flex items-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-500"
+                >
+                  Deletar
+                </button>
               </span>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div>
-      <p>Page Count: {{ searchResult.pageCount }}</p>
-      <p>Page Index: {{ searchResult.pageIndex }}</p>
-      <p>Page Size: {{ searchResult.pageSize }}</p>
-      <p>Total Records: {{ searchResult.totalRecords }}</p>
-    </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import DialogComponent from "./DialogComponent.vue";
+import DialogComponent from "../shared/DialogComponent.vue";
 const isModalOpen = ref(false);
 
 let product = "";
@@ -91,19 +93,6 @@ const handleProductDelete = (payload) => {
 };
 
 const props = defineProps({
-  searchResult: {
-    type: Object,
-    required: true,
-    validator(value) {
-      return value.every(
-        (item) =>
-          item.hasOwnProperty("pageCount") &&
-          item.hasOwnProperty("pageIndex") &&
-          item.hasOwnProperty("pageSize") &&
-          item.hasOwnProperty("totalRecords")
-      );
-    },
-  },
   products: {
     type: Array,
     required: true,
@@ -112,13 +101,14 @@ const props = defineProps({
         (item) =>
           item.hasOwnProperty("id") &&
           item.hasOwnProperty("name") &&
-          item.hasOwnProperty("barcode") &&
+          item.hasOwnProperty("barCode") &&
           item.hasOwnProperty("price") &&
-          item.hasOwnProperty("image")
+          item.hasOwnProperty("image") &&
+          item.hasOwnProperty("createdAt") &&
+          item.hasOwnProperty("isActive")
       );
     },
   },
-  searchResult: {},
 });
 
 function formattedPrice(price) {

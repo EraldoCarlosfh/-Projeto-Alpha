@@ -12,7 +12,9 @@
     "@headlessui/vue": "^1.7.22",
     "@heroicons/vue": "^2.1.5",
     "@kyvg/vue3-notification": "^3.3.0",
+    "@primevue/themes": "^4.0.5",
     "axios": "^1.7.7",
+    "primevue": "^4.0.5",
     "superagent": "^10.1.0",
     "vue": "^3.4.37",
     "vue-router": "^4.4.3"
