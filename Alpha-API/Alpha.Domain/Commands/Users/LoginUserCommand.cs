@@ -4,7 +4,6 @@ using Alpha.Domain.Validators.Commands.Users;
 using Alpha.Framework.MediatR.Data.Repositories;
 using Alpha.Framework.MediatR.Data.UnitOfWork;
 using Alpha.Framework.MediatR.Notifications;
-using Alpha.Framework.MediatR.Resources.Extensions;
 using Alpha.Framework.MediatR.SecurityService.DataTransferObjects;
 using Alpha.Framework.MediatR.SecurityService.Models;
 using Alpha.Framework.MediatR.SecurityService;
@@ -17,15 +16,9 @@ using System.Threading;
 namespace Alpha.Domain.Commands.Users
 {
     public class LoginUserCommand : OctaNotifiable, IRequest<ICommandResult<LoginUserResponse>>
-    {
-        public const string IDENTIFICATION_TYPE_EMAIL = "EMAIL";
-        public const string IDENTIFICATION_TYPE_CPF = "CPF";
-        public const string IDENTIFICATION_TYPE_CELULAR = "CELULAR";
-        public const string IDENTIFICATION_TYPE_CODIGO_CELULAR = "CODIGO_CELULAR";
-
-        public string IdentificationType { get; set; }
-        public string UserIdentification { get; set; }
-        public string SaltPassword { get; set; }
+    {    
+        public string Email { get; set; }
+        public string Password { get; set; }
 
         public bool IsValid()
         {
@@ -60,78 +53,40 @@ namespace Alpha.Domain.Commands.Users
                 return new CommandResult<LoginUserResponse>(false, "Errors", command.Notifications);
 
             User user = null;
-            switch (command.IdentificationType.ToUpper())
-            {
-                case LoginUserCommand.IDENTIFICATION_TYPE_EMAIL:
-                    user = await _userQuery.GetUserByEmail(command.UserIdentification.ToLower());
-                    break;
-                case LoginUserCommand.IDENTIFICATION_TYPE_CPF:
-                    user = await _userQuery.GetUserByDocumentNumber(command.UserIdentification.ClearNumberMask());
-                    break;
-                case LoginUserCommand.IDENTIFICATION_TYPE_CELULAR:
-                    user = await _userQuery.GetUserByCellPhone(command.UserIdentification.ClearNumberMask());
-                    break;
-                case LoginUserCommand.IDENTIFICATION_TYPE_CODIGO_CELULAR:
-                    user = await _userQuery.GetUserByLoginPhoneCode(command.UserIdentification.ClearNumberMask());
-                    break;
-            }
+                   
+            user = await _userQuery.GetUserByEmail(command.Email);
 
             if (user == null)
-            {
-                return await HandleUserNotExistError(command);
-            }
-
-            if (user.IsAccessActivated != true)
-            {
-                return await HandleActivateError(command, user);
-            }
-           
-            var userEncryptedPasswordResponse = _encryptionService.GenerateEncryptedPassword(command.SaltPassword);
-            if (!userEncryptedPasswordResponse.IsSuccess)
-            {
+                return await HandleUserNotExistError(command);         
+         
+            if (user.Password != command.Password)
                 return await HandlePasswordError(command, user);
-            }
 
-            var userEncryptedPassword = _encryptionService.Encrypt(userEncryptedPasswordResponse.Password);
-            if (command.IdentificationType.ToUpper() != LoginUserCommand.IDENTIFICATION_TYPE_CODIGO_CELULAR && !userEncryptedPassword.Equals(user.Password))
+            user.Login();
+
+            await _userRepository.UpdateAsync(user);
+
+            var tokenRequest = new CreateTokenRequest()
             {
-                return await HandlePasswordError(command, user);
-            }
-            else
+                Email = user.Email,
+                Id = user.Id.ToString(),
+                Name = $"{user.FirstName} {user.LastName}"
+            };
+
+            var tokenResponse = _tokenService.CreateToken(tokenRequest);
+
+            var response = new LoginUserResponse()
             {
-                user.Login();
+                ExpirationDate = tokenResponse.ExpirationDate,
+                Token = tokenResponse.Token,
+                User = user,
+                UserId = user.Id.ToString(),
+                PasswordErrorsAllowed = user.PasswordErrorsAllowed,
+                IsAccessActivated = user.IsAccessActivated,
+                IsNewNotification = user.IsNewNotification
+            };
 
-                if (command.IdentificationType.ToUpper() == LoginUserCommand.IDENTIFICATION_TYPE_CODIGO_CELULAR)
-                    user.RemoveLoginPhoneCode();
-
-                await _userRepository.UpdateAsync(user);
-
-                bool? isRegisteredDetran, enabledRE, isExpirationDate;
-                bool isApprovedNotificationViewed;
-              
-
-                var tokenRequest = new CreateTokenRequest()
-                {                  
-                    Email = user.Email ?? user.CellPhone,
-                    Id = user.Id.ToString(),
-                    Name = $"{user.FirstName} {user.LastName}"
-                };
-
-                var tokenResponse = _tokenService.CreateToken(tokenRequest);
-
-                var response = new LoginUserResponse()
-                {
-                    ExpirationDate = tokenResponse.ExpirationDate,
-                    Token = tokenResponse.Token,               
-                    User = user,
-                    UserId = user.Id.ToString(),
-                    PasswordErrorsAllowed = user.PasswordErrorsAllowed,
-                    IsAccessActivated = user.IsAccessActivated,
-                    IsNewNotification = user.IsNewNotification
-                };
-
-                return new CommandResult<LoginUserResponse>(true, "Success", response);
-            }
+            return new CommandResult<LoginUserResponse>(true, "Success", response);
         }       
 
         private async Task<ICommandResult<LoginUserResponse>> HandleUserNotExistError(LoginUserCommand command)
@@ -141,8 +96,7 @@ namespace Alpha.Domain.Commands.Users
             var retorno = new CommandResult<LoginUserResponse>(false, "Errors", command.Notifications,
                 new LoginUserResponse
                 {
-                    UserExists = false,
-                    IsAccessActivated = true
+                    UserExists = false
                 });
             return retorno;
         }
@@ -159,49 +113,9 @@ namespace Alpha.Domain.Commands.Users
                 new LoginUserResponse
                 {
                     PasswordErrorsAllowed = user.PasswordErrorsAllowed,
-                    IsAccessActivated = user.IsAccessActivated,
-                    IsApproved = true
+                    IsAccessActivated = user.IsAccessActivated
                 });
             return retorno;
-        }
-
-        private async Task<ICommandResult<LoginUserResponse>> HandleActivateError(LoginUserCommand command, User user)
-        {
-            var codeResponse = _tokenService.GenerateVerificationCode(user.Email ?? user.CellPhone);
-
-            user.ResendActivationCodeByEmail(codeResponse.Code, codeResponse.ExpirationDate, false);
-            command.AddNotification("Erro", "O Usuário precisa ser ativado.");
-            return new CommandResult<LoginUserResponse>(false, "Errors", command.Notifications,
-                new LoginUserResponse
-                {
-                    UserId = user.Id.ToString(),
-                    PasswordErrorsAllowed = user.PasswordErrorsAllowed,
-                    IsAccessActivated = user.IsAccessActivated
-                });
-        }
-
-        private async Task<ICommandResult<LoginUserResponse>> HandleActivatePersonError(LoginUserCommand command, User user)
-        {
-            command.AddNotification("Erro", "A empresa ainda não foi validada pelos gestores Octa.");
-            return new CommandResult<LoginUserResponse>(false, "Errors", command.Notifications,
-                new LoginUserResponse
-                {
-                    UserId = user.Id.ToString(),
-                    PasswordErrorsAllowed = user.PasswordErrorsAllowed,
-                    IsAccessActivated = user.IsAccessActivated
-                });
-        }
-
-        private async Task<ICommandResult<LoginUserResponse>> HandleDeclinePersonError(LoginUserCommand command, User user)
-        {
-            command.AddNotification("Erro", "O cadastro da empresa não foi aceito pelos gestores Octa.");
-            return new CommandResult<LoginUserResponse>(false, "Errors", command.Notifications,
-                new LoginUserResponse
-                {
-                    UserId = user.Id.ToString(),
-                    PasswordErrorsAllowed = user.PasswordErrorsAllowed,
-                    IsAccessActivated = user.IsAccessActivated
-                });
-        }
+        }        
     }
 }

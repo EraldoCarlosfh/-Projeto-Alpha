@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Validators\ValidationMessages.resources" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Validators\ValidationMessages.resources" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 

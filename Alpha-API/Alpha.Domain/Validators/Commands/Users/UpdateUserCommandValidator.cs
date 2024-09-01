@@ -10,8 +10,8 @@ namespace Alpha.Domain.Validators.Commands.Users
     {
         public UpdateUserCommandValidator()
         {
-            RuleFor(x => x.FullName).NotEmpty().WithMessage(ValidationMessages.RequiredField.Formater("Nome"));
-            RuleFor(x => x.Email).NotEmpty().WithMessage(ValidationMessages.RequiredField.Formater("E-mail"));
+            RuleFor(x => x.FullName).NotEmpty().WithMessage("Nome é obrigatório.");
+            RuleFor(x => x.Email).NotEmpty().WithMessage("E-mail é obrigatório.");
         }
     }
 }

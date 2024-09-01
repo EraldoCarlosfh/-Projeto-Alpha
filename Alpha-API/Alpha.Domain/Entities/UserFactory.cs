@@ -46,7 +46,6 @@ namespace Alpha.Domain.Entities
                 EncryptedDocumentNumber = encryptedDocumentNumber,
                 Birthdate = null,
                 PhotorUrl = photorUrl,
-                CreatedAt = DateTime.Now.ToLocalTimeZone(),
                 UserName = userName,
                 Email = email.ToLower().Trim(),
                 IsEmailVerified = isEmailVerified,
@@ -84,11 +83,11 @@ namespace Alpha.Domain.Entities
                 LastName = GetLastName(command.FullName),
                 Birthdate = null,
                 FullName = command.FullName,
-                CreatedAt = DateTime.Now.ToLocalTimeZone(),
                 Email = command.Email.ToLower().Trim(),
                 Password = userEncryptedPassword,
                 EmailActivationCode = emailActivationCode,
                 IsNewNotification = true,
+                IsActive = true,
                 EmailActivationCodeExpirationDate = emailActivationCodeExpirationDate
             };
         }
@@ -101,7 +100,6 @@ namespace Alpha.Domain.Entities
             PasswordUpdatedDate = DateTime.UtcNow.ToLocalTimeZone();
             IsAccessActivated = true;
             IsActive = true;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
             ActivationIp = request.ActivationIp;
             ActivationOperationalSystem = request.ActivationOperationalSystem;
             ActivationBrowser = request.ActivationBrowser;
@@ -114,7 +112,6 @@ namespace Alpha.Domain.Entities
         public void SetCellphone(string cellphone)
         {
             CellPhone = cellphone;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
 
         public void ChangePassword(string userEncryptedPassword)
@@ -122,18 +119,15 @@ namespace Alpha.Domain.Entities
             Password = userEncryptedPassword;
             PasswordUpdatedDate = DateTime.UtcNow.ToLocalTimeZone();
             PasswordErrorsAllowed = 5;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
         public void UpdateNewNotification(bool isNewNotification)
         {
             IsNewNotification = isNewNotification;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
 
         public void SetOnboardingCompleted()
         {
             IsOnboardingCompleted = true;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
 
 
@@ -142,7 +136,6 @@ namespace Alpha.Domain.Entities
             IsTermsAccepted = true;
             LastTermsAcceptanceDate = DateTime.UtcNow.ToLocalTimeZone();
             ActivationIp = request.ActivationIp;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
             ActivationOperationalSystem = request.ActivationOperationalSystem;
             ActivationBrowser = request.ActivationBrowser;
         }
@@ -151,7 +144,6 @@ namespace Alpha.Domain.Entities
         {
             ResendCodesAllowed = 5;
             EmailActivationCode = emailVerificationCode;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
             EmailActivationCodeExpirationDate = emailVerificationCodeExpirationDate.ToLocalTimeZone();
         }
 
@@ -159,7 +151,6 @@ namespace Alpha.Domain.Entities
         {
             ResendCodesAllowed = 5;
             CellPhoneActivationCode = cellPhoneVerificationCode;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
             CellPhoneActivationCodeExpirationDate = cellPhoneVerificationCodeExpirationDate.ToLocalTimeZone();
         }
 
@@ -167,8 +158,6 @@ namespace Alpha.Domain.Entities
         {
             PasswordErrorsAllowed--;
             if (PasswordErrorsAllowed == 0) IsAccessActivated = false;
-
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
 
         public void ResendActivationCodeByEmail(string emailVerificationCode, DateTime emailVerificationCodeExpirationDate, bool isDecreaseOperation = true)
@@ -178,7 +167,6 @@ namespace Alpha.Domain.Entities
 
             EmailActivationCode = emailVerificationCode;
             EmailActivationCodeExpirationDate = emailVerificationCodeExpirationDate.ToLocalTimeZone();
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
 
         public void ResendActivationCodeByCellPhone(string cellPhoneVerificationCode, DateTime cellPhoneVerificationCodeExpirationDate, bool isDecreaseOperation = true)
@@ -188,7 +176,6 @@ namespace Alpha.Domain.Entities
 
             CellPhoneActivationCode = cellPhoneVerificationCode;
             CellPhoneActivationCodeExpirationDate = cellPhoneVerificationCodeExpirationDate.ToLocalTimeZone();
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
 
         public void ResendActivationCodeByWhatsapp(string whatsappVerificationCode, DateTime whatsappVerificationCodeExpirationDate, bool isDecreaseOperation = true)
@@ -198,7 +185,6 @@ namespace Alpha.Domain.Entities
 
             WhatsappActivationCode = whatsappVerificationCode;
             WhatsappActivationCodeExpirationDate = whatsappVerificationCodeExpirationDate.ToLocalTimeZone();
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
 
         public void ResetPasswordByEmail(string userEncryptedPassword)
@@ -209,7 +195,6 @@ namespace Alpha.Domain.Entities
             ResendCodesAllowed = 5;
             EmailActivationCode = null;
             EmailActivationCodeExpirationDate = null;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
             IsAccessActivated = true;
         }
 
@@ -219,7 +204,6 @@ namespace Alpha.Domain.Entities
             PasswordUpdatedDate = DateTime.UtcNow.ToLocalTimeZone();
             PasswordErrorsAllowed = 5;
             ResendCodesAllowed = 5;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
             CellPhoneActivationCode = null;
             CellPhoneActivationCodeExpirationDate = null;
             IsAccessActivated = true;
@@ -229,28 +213,24 @@ namespace Alpha.Domain.Entities
         {
             IsTermsAccepted = false;
             LastTermsAcceptanceDate = null;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
 
         public void UpdateAccess(bool activationStatus)
         {
             IsAccessActivated = activationStatus;
             PasswordErrorsAllowed = 5;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
             ResendCodesAllowed = 5;
         }
 
         public void UpdateActivated(bool activated)
         {
             IsActive = activated;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
 
         public void UpdateFullname(string fullName)
         {
             FirstName = fullName.GetFirstName();
             LastName = fullName.GetLastName();
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
 
         public void Update(string cellphone, DateTime? birthdate, string email)
@@ -258,7 +238,6 @@ namespace Alpha.Domain.Entities
             CellPhone = cellphone;
             Birthdate = birthdate;
             Email = email;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
 
 
@@ -266,21 +245,18 @@ namespace Alpha.Domain.Entities
         {
             MaskedDocumentNumber = documentNumber.HideCPF();
             EncryptedDocumentNumber = encryptedDocumentNumber;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
 
         public void UpdateEmail(string email, string emailVerificationCode, DateTime emailVerificationCodeExpirationDate)
         {
             Email = email.ToLower().Trim();
             IsEmailVerified = false;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
             EmailActivationCode = emailVerificationCode;
             EmailActivationCodeExpirationDate = emailVerificationCodeExpirationDate.ToLocalTimeZone();
         }
         public void UpdateCellPhone(string cellPhone, string cellPhoneVerificationCode, DateTime cellPhoneVerificationCodeExpirationDate)
         {
             CellPhone = cellPhone;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
             IsCellPhoneVerified = false;
             CellPhoneActivationCode = cellPhoneVerificationCode;
             CellPhoneActivationCodeExpirationDate = cellPhoneVerificationCodeExpirationDate.ToLocalTimeZone();
@@ -291,25 +267,21 @@ namespace Alpha.Domain.Entities
             LastLoginDate = DateTime.UtcNow.ToLocalTimeZone();
             PasswordErrorsAllowed = 5;
             ResendCodesAllowed = 5;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
 
         public void VerifyCellphone()
         {
             IsCellPhoneVerified = true;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
 
         public void VerifyEmail()
         {
             IsEmailVerified = true;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
 
         public void VerifyWhatsapp()
         {
             IsWhatsappVerified = true;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
 
         public string GenerateLoginPhoneCode()

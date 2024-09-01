@@ -6,12 +6,11 @@ using Alpha.Framework.MediatR.Resources.Extensions;
 using Alpha.Framework.MediatR.SecurityService.Models;
 using Alpha.Integrations.Encryption;
 using Alpha.Domain.Queries.Products;
-using System.Data;
-using System.Data.Entity;
 using Alpha.Framework.MediatR.Data.Queries;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Alpha.Query.Queries.Users
 {

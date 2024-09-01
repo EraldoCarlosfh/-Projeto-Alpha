@@ -47,7 +47,6 @@ namespace Alpha.Framework.MediatR.SecurityService
                 Subject = new ClaimsIdentity(claims),
                 Issuer = _tokenConfiguration.Issuer,
                 Audience = _tokenConfiguration.Audience,
-                SigningCredentials = _signingConfiguration.SigningCredentials,
                 NotBefore = response.CreateDate,
                 Expires = response.ExpirationDate
             };

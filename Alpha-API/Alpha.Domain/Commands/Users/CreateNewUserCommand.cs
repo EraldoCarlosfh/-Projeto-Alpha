@@ -18,7 +18,6 @@ namespace Alpha.Domain.Commands.Users
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public bool? IsAcceptUseTerms { get; set; }
 
         public bool IsValid()
         {
@@ -54,25 +53,20 @@ namespace Alpha.Domain.Commands.Users
         {
             if (!command.IsValid())
                 return ValidationErrors(command.Notifications);
-
-            var userEncryptedPasswordResponse = _encryptionService.GenerateEncryptedPassword(command.Password);
-
-            if (!userEncryptedPasswordResponse.IsSuccess)
-            {
-                AddNotification("Erro", $"Não foi possivel utilizar a senha informada para o usuário");
-                return ValidationErrors(Notifications);
-            }
-
-            var encryptedPassword = _encryptionService.Encrypt(userEncryptedPasswordResponse.Password);
+            
             var codeResponseEmail = _authenticationService.GenerateVerificationCode(command.Email.ToLower());
 
-            var user = User.Create(
+            var user = await _userQuery.GetUserByEmail(command.Email);
+
+            if (user != null) {
+                return ValidationErrors(command.AddNotification(new Notification("Cadastro", "E-mail já cadastrado na base de dados.")));
+            }
+
+            user = User.Create(
                 command,
-                encryptedPassword,
+                command.Password,
                 codeResponseEmail.Code,
                 codeResponseEmail.ExpirationDate);
-
-            user.TermsAccepted(command.IsAcceptUseTerms);    
 
             await _userRepository.AddAsync(user);
 
