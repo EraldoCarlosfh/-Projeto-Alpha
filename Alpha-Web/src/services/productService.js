@@ -34,7 +34,6 @@ export const productService = {
     }
   },
   listPage: async (requestPayload) => {
-    console.log("Instancia Axios: ", instance);
     try {
       const response = await instance.post(`/products/all-page`, requestPayload);
       return response.data.data;

@@ -107,13 +107,13 @@
                     <input
                       type="text"
                       v-mask="'#0,00'"
-                      v-model="amount"
-                      @blur="updateAmount()"
+                      v-model="price"
+                      @blur="updatePrice()"
                       placeholder="Digite um valor"
                       class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
-                    <span class="span-error" v-if="errors.amount">{{
-                      errors.amount
+                    <span class="span-error" v-if="errors.price">{{
+                      errors.price
                     }}</span>
                   </div>
                 </div>
@@ -148,6 +148,8 @@
 import axios from "axios";
 import { notify } from "@kyvg/vue3-notification";
 import NavBarComponent from "./NavBarComponent.vue";
+import { productService } from "../services/productService";
+
 export default {
   components: {
     NavBarComponent,
@@ -156,47 +158,47 @@ export default {
     return {
       form: {
         name: "",
-        amount: "0",
+        price: "0",
         barcode: "",
         image: "https://i.pravatar.cc",
       },
       errors: {
         name: null,
-        amount: null,
+        price: null,
         barcode: null,
       },
       product: {
         name: "",
-        amount: 0,
+        price: 0,
         barcode: "",
         image: "https://i.pravatar.cc",
       },
-      amount: "0",
+      price: "0",
     };
   },
   computed: {
     isFormValid() {
       return (
         !this.errors.name &&
-        !this.errors.amount &&
+        !this.errors.price &&
         !this.errors.barcode &&
         this.form.name &&
-        this.form.amount &&
+        this.form.price &&
         this.form.barcode
       );
     },
-    formattedAmount() {
+    formattedPrice() {
       return new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL",
-      }).format(parseFloat(this.amount.replace(",", ".")));
+      }).format(parseFloat(this.price.replace(",", ".")));
     },
   },
   methods: {
     handleCancel() {
       (this.form.name = ""),
-        (this.form.amount = "0"),
-        (this.amount = "0"),
+        (this.form.price = "0"),
+        (this.price = "0"),
         (this.form.barcode = ""),
         (this.form.image = null);
     },
@@ -210,13 +212,13 @@ export default {
         this.errors.name = null;
       }
     },
-    validateAmount() {
-      if (!this.form.amount) {
-        this.errors.amount = "O valor é obrigatório.";
-      } else if (this.form.amount == 0) {
-        this.errors.amount = "O valor deve ser maior que 0.";
+    validatePrice() {
+      if (!this.form.price) {
+        this.errors.price = "O valor é obrigatório.";
+      } else if (this.form.price == 0) {
+        this.errors.price = "O valor deve ser maior que 0.";
       } else {
-        this.errors.amount = null;
+        this.errors.price = null;
       }
     },
     validateBarcode() {
@@ -235,49 +237,38 @@ export default {
         this.form.image = file;
       }
     },
-    updateAmount() {
-      this.validateAmount();
-      if (this.form.amount != 0 || this.form.amount != NaN) {
-        this.form.amount = this.formattedAmount;
-        this.amount = this.formattedAmount;
+    updatePrice() {
+      this.validatePrice();
+      if (this.form.price != 0 || this.form.price != NaN) {
+        this.form.price = this.formattedPrice;
+        this.price = this.formattedPrice;
       }
     },
     async submitForm() {
-      console.log("Antes", this.product);
       this.product = { ...this.form };
-      console.log("Depois", this.product);
-
-      const formData = new FormData();
-      formData.append("name", this.product.name);
-      formData.append(
-        "amount",
-        parseFloat(this.product.amount.replace("R$", ",", "."))
-      );
-      formData.append("barcode", this.product.barcode);
-      if (this.product.image) {
-        formData.append("image", this.product.image);
-      }
-
-      console.log(formData);
+      this.product.price = this.product.price.replace("R$", ",", ".");
 
       try {
-        await axios.post("https://api.example.com/products", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        const response = await productService.create(this.product);
         notify({
           title: "Sucesso!",
           text: "Produto cadastrado com sucesso.",
           type: "success",
         });
       } catch (error) {
+        this.errorMessage = error.message;
         notify({
-          title: "Erro!",
-          text: "Erro ao cadastrar produto.",
+          title: error.code,
+          text: error.message,
           type: "error",
         });
+      } finally {
+        this.loading = false;
       }
+    },
+
+    redirectHome() {
+      this.$router.push("/home");
     },
   },
 };

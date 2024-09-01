@@ -73,7 +73,6 @@ const props = defineProps({
     },
   },
 });
-console.log("Produtos Lista: ", props.products);
 
 function setTitle(name) {
   if (name.length > 40) {

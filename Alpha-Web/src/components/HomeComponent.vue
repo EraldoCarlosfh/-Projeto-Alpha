@@ -20,7 +20,7 @@
               + Cadastrar
             </button>
           </span>
-          <DropdonwComponent @order-selected="handleOptionSelected" />
+          <DropdownComponent @order-selected="handleOptionSelected" />
         </div>
         <p v-if="loading">Loading...</p>
         <ProductsListComponent :products="productsList" v-else />
@@ -33,15 +33,15 @@
 <script>
 import { notify } from "@kyvg/vue3-notification";
 import ProductsListComponent from "./ProductsListComponent.vue";
-import NavBarComponent from "./NavBarComponent.vue";
-import DropdonwComponent from "./DropdonwComponent.vue";
+import NavBarComponent from "../shared/NavBarComponent.vue";
+import DropdownComponent from "../shared/DropdownComponent.vue";
 import { productService } from "../services/productService";
 
 export default {
   components: {
     ProductsListComponent,
     NavBarComponent,
-    DropdonwComponent,
+    DropdownComponent,
   },
   data() {
     return {
