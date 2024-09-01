@@ -16,18 +16,29 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
+    meta: { requiresAuth: true },
     component: HomeComponent,
   },
   {
     path: '/cadastro',
     name: 'Cadastro',
+    meta: { requiresAuth: true },
     component: ProductRegisterComponent,
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
-  routes,
+  routes
+});
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = !!localStorage.getItem('user');
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next('/login');
+  } else {
+    next();
+  }
 });
 
 export default router;

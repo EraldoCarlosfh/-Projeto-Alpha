@@ -74,12 +74,12 @@ namespace Alpha.Query.Queries.Users
                 if (!globarFilter.IsNullOrEmpty())
                     query = query.Where(c => globarFilter.Contains(c.Name.ToLower()));
 
-                query = FilterByPerson(query, request);
+                query = FilterProducts(query, request);
 
                 return await query.Page(request);
             }
 
-            private IQueryable<Product> FilterByPerson(IQueryable<Product> query, PagedSearchRequest request)
+            private IQueryable<Product> FilterProducts(IQueryable<Product> query, PagedSearchRequest request)
             {        
                 if (request.Order == OrderingOption.Ascending)
                     query = query.OrderBy(c => c.Name);

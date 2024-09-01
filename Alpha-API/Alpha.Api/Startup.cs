@@ -70,6 +70,7 @@ namespace Alpha.Api
                                   builder =>
                                   {
                                       builder.WithOrigins("*")
+                                      .AllowAnyOrigin()
                                       .AllowAnyHeader()
                                       .AllowAnyMethod();
                                   });

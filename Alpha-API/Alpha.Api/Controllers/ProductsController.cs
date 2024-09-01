@@ -69,12 +69,12 @@ namespace Alpha.Api.Controllers
             return CustomResponse<List<Product>, List<ProductViewModel>>(response);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("all-page")]
         [ProducesResponseType(typeof(List<ProductViewModel>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetAllProductsPage([FromQuery] PagedSearchRequest request)
+        public async Task<IActionResult> GetAllProductsPage(PagedSearchRequest request)
         {
             var response = await _productQuery.ListPageProducts(request);
             if (response == null) return NotFound();

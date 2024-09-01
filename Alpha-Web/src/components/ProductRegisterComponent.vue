@@ -38,16 +38,16 @@
                             for="file-upload"
                             class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                           >
-                            <span>Upload de imagem</span>
+                            <span class="text-indigo-600"
+                              >Upload de imagem</span
+                            >
                             <input
                               id="file-upload"
                               name="file-upload"
-                              @blur="validateImage"
                               @change="handleFileChange"
                               type="file"
                               class="sr-only"
                             />
-                            <span v-if="errors.image">{{ errors.image }}</span>
                           </label>
                         </div>
                         <p class="text-xs leading-5 text-gray-600">
@@ -74,7 +74,9 @@
                       @blur="validateName"
                       class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
-                    <span v-if="errors.name">{{ errors.name }}</span>
+                    <span class="span-error" v-if="errors.name">{{
+                      errors.name
+                    }}</span>
                   </div>
                 </div>
 
@@ -90,7 +92,9 @@
                       @blur="validateBarcode"
                       class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
-                    <span v-if="errors.barcode">{{ errors.barcode }}</span>
+                    <span class="span-error" v-if="errors.barcode">{{
+                      errors.barcode
+                    }}</span>
                   </div>
                 </div>
 
@@ -108,7 +112,9 @@
                       placeholder="Digite um valor"
                       class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
-                    <span v-if="errors.amount">{{ errors.amount }}</span>
+                    <span class="span-error" v-if="errors.amount">{{
+                      errors.amount
+                    }}</span>
                   </div>
                 </div>
               </div>
@@ -152,19 +158,18 @@ export default {
         name: "",
         amount: "0",
         barcode: "",
-        image: null,
+        image: "https://i.pravatar.cc",
       },
       errors: {
         name: null,
         amount: null,
         barcode: null,
-        image: null,
       },
       product: {
         name: "",
         amount: 0,
         barcode: "",
-        image: null,
+        image: "https://i.pravatar.cc",
       },
       amount: "0",
     };
@@ -175,11 +180,9 @@ export default {
         !this.errors.name &&
         !this.errors.amount &&
         !this.errors.barcode &&
-        !this.errors.image &&
         this.form.name &&
         this.form.amount &&
-        this.form.barcode &&
-        this.form.image
+        this.form.barcode
       );
     },
     formattedAmount() {
@@ -226,13 +229,6 @@ export default {
         this.errors.barcode = null;
       }
     },
-    validateImage() {
-      if (!this.form.image) {
-        this.errors.image = "A imagem é obrigatória.";
-      } else {
-        this.errors.image = null;
-      }
-    },
     handleFileChange(event) {
       const file = event.target.files[0];
       if (file) {
@@ -246,48 +242,48 @@ export default {
         this.amount = this.formattedAmount;
       }
     },
-  },
-  async submitForm() {
-    console.log("Antes", this.product);
-    this.product = { ...this.form };
-    console.log("Depois", this.product);
-    return;
-    const formData = new FormData();
-    formData.append("name", this.product.name);
-    formData.append(
-      "amount",
-      parseFloat(this.product.amount.replace("R$", ",", "."))
-    );
-    formData.append("barcode", this.product.barcode);
-    if (this.product.image) {
-      formData.append("image", this.product.image);
-    }
+    async submitForm() {
+      console.log("Antes", this.product);
+      this.product = { ...this.form };
+      console.log("Depois", this.product);
 
-    console.log(formData);
+      const formData = new FormData();
+      formData.append("name", this.product.name);
+      formData.append(
+        "amount",
+        parseFloat(this.product.amount.replace("R$", ",", "."))
+      );
+      formData.append("barcode", this.product.barcode);
+      if (this.product.image) {
+        formData.append("image", this.product.image);
+      }
 
-    try {
-      await axios.post("https://api.example.com/products", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      notify({
-        title: "Sucesso!",
-        text: "Produto cadastrado com sucesso.",
-        type: "success",
-      });
-    } catch (error) {
-      notify({
-        title: "Erro!",
-        text: "Erro ao cadastrar produto.",
-        type: "error",
-      });
-    }
+      console.log(formData);
+
+      try {
+        await axios.post("https://api.example.com/products", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        notify({
+          title: "Sucesso!",
+          text: "Produto cadastrado com sucesso.",
+          type: "success",
+        });
+      } catch (error) {
+        notify({
+          title: "Erro!",
+          text: "Erro ao cadastrar produto.",
+          type: "error",
+        });
+      }
+    },
   },
 };
 </script>
 <style scoped>
-span {
+.span-error {
   color: red;
   font-size: 12px;
 }

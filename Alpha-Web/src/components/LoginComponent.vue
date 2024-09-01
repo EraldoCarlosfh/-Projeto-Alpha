@@ -78,17 +78,18 @@
 </template>
 <script>
 import { notify } from "@kyvg/vue3-notification";
+import { authService } from "../services/authService";
 
 export default {
   data() {
     return {
       form: {
-        password: "",
         email: "",
+        password: "",
       },
       errors: {
-        password: null,
         email: null,
+        password: null,
       },
     };
   },
@@ -125,21 +126,21 @@ export default {
     async login() {
       this.validatePassword();
       this.validateEmail();
-      const isAuthenticated =
-        this.form.email === "email@email.com" &&
-        this.form.password === "123123";
 
-      if (isAuthenticated) {
+      try {
+        const user = await authService.login(this.form);
+        if (user != null) {
+          notify({
+            title: "Sucesso!",
+            text: "Login efetuado com sucesso.",
+            type: "success",
+          });
+          this.$router.push("home");
+        }
+      } catch (error) {
         notify({
-          title: "Sucesso!",
-          text: "Login efetuado com sucesso.",
-          type: "success",
-        });
-        this.$router.push("home");
-      } else {
-        notify({
-          title: "Erro!",
-          text: "Formulário inválido, verifique os seus dados de acesso.",
+          title: error.code,
+          text: error.message,
           type: "error",
         });
       }
