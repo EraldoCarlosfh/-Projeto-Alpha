@@ -5,7 +5,7 @@ using Alpha.Domain.Queries.Users;
 using Alpha.Framework.MediatR.EventSourcing.Commands;
 using Alpha.Framework.MediatR.Resources.Extensions;
 using FluentValidation;
-using OctaTech.Domain.Validators;
+using Alpha.Domain.Validators;
 using System.Threading;
 using System.Threading.Tasks;
 

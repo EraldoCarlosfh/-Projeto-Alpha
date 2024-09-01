@@ -2,7 +2,7 @@
 using Alpha.Domain.Extensions.Commons;
 using Alpha.Framework.MediatR.EventSourcing.Commands;
 using FluentValidation;
-using OctaTech.Domain.Validators;
+using Alpha.Domain.Validators;
 
 namespace Alpha.Domain.Validators.Commands.Users
 {
