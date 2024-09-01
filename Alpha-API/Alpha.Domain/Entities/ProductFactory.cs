@@ -31,6 +31,7 @@ namespace Alpha.Domain.Entities
                 Name = command.Name,
                 BarCode = command.BarCode,
                 Price = command.Price,
+                IsActive = true,
                 Image = command.Image
             };
         }       
