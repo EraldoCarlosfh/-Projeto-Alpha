@@ -8,12 +8,6 @@
 
 2. [Tecnologias utilizadas]
 
-3. [Configurando a API]
-
-   [NO ECLIPSE](https://github.com/EraldoCarlosfh/ApiRest-StarWars#no-eclipse)
-
-6. [Considerações finais]
-
 ### 1. Sobre o projeto
 
 O objetivo deste projeto foi a criação de uma API Rest para o armazenamento de dados de um produto, e o desenvolvimento frontend com Vue.js para listagem, cadastro, edição e remoção dos produtos (CRUD), também foi implementado todo um sistema de autenticação com JWT no backend e aplicação proteção de rotas no frontend, o sistema conta com as telas da área não logado de cadastro de usuário e login, para o sistema usuário precisa primeiro efetuar cadastro.
