@@ -18,8 +18,7 @@ namespace Alpha.Domain.Entities
                 Id = id == null ? new EntityId(Guid.NewGuid().ToString()) : id.ToEntityId(),
                 Name = name,
                 BarCode = barCode,
-                Price = price,
-                CreatedAt = DateTime.Now.ToLocalTimeZone(),
+                Price = price
                 IsActive = true
             };
         }
@@ -32,27 +31,23 @@ namespace Alpha.Domain.Entities
                 Name = command.Name,
                 BarCode = command.BarCode,
                 Price = command.Price,
-                Image = command.Image,
-                CreatedAt = DateTime.Now.ToLocalTimeZone(),
+                Image = command.Image
             };
         }       
 
         public void SetImage(string image)
         {
             Image = image;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
 
         public void UpdateActivated(bool activated)
         {
             IsActive = activated;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
 
         public void UpdateName(string name)
         {
             Name = name;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
 
         public void Update(UpdateProductCommand command)
@@ -61,7 +56,6 @@ namespace Alpha.Domain.Entities
             BarCode = command.BarCode;
             Image = command.Image;
             Price = command.Price;
-            UpdatedAt = DateTime.Now.ToLocalTimeZone();
         }
     }
 }
