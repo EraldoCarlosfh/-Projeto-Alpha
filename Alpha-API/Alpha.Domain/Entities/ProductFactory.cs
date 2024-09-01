@@ -18,7 +18,7 @@ namespace Alpha.Domain.Entities
                 Id = id == null ? new EntityId(Guid.NewGuid().ToString()) : id.ToEntityId(),
                 Name = name,
                 BarCode = barCode,
-                Price = price
+                Price = price,
                 IsActive = true
             };
         }
