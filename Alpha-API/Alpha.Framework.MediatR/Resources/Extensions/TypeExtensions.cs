@@ -23,7 +23,6 @@ namespace Alpha.Framework.MediatR.Resources.Extensions
             if (numberOfMissings == 0)
                 return true;
 
-            // Consider 20% of allowed missing properties to handler null values
             double error = Math.Round((double)numberOfMissings / (double)propertiesInfo.Count(), 2);
 
             return error < 0.20;

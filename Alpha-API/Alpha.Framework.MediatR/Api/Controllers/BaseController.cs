@@ -14,7 +14,6 @@ namespace Alpha.Framework.MediatR.Api.Controllers
             if (ModelState.IsValid) return null;
             var messageSB = new StringBuilder();
 
-            // Obter todas as mensagens de validação.
             var erroneousFields =
                 ModelState
                     .Where(ms => ms.Value.Errors.Any())
@@ -27,12 +26,10 @@ namespace Alpha.Framework.MediatR.Api.Controllers
             var itemIndex = 1;
             foreach (var item in erroneousFields)
             {
-                // Obter nome do campo validado e remover o índice, se houver.
                 var fieldName = item.Field;
                 if (item.Field.Contains('.'))
                     fieldName = item.Field.Split('.')[1];
 
-                // Índice (one-based) - nome do campo: mensagem de validação.
                 messageSB.AppendLine($"{itemIndex} - {fieldName}: {item.Description}");
                 itemIndex++;
             }

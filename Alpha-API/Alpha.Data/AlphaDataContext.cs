@@ -33,19 +33,17 @@ namespace Alpha.Data
     public class DataContextFactory : IDesignTimeDbContextFactory<AlphaDataContext>
     {
         public AlphaDataContext CreateDbContext(string[] args)
-        {
-            // Get environment            
+        {                 
             var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
-            // Build config
+        
             IConfiguration config = new ConfigurationBuilder()
                 .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../Alpha.Api"))
                 .AddJsonFile($"appsettings.{environmentName}.json", optional: false, reloadOnChange: true)
                 .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder<AlphaDataContext>();
-            //optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"), builder =>
-            optionsBuilder.UseNpgsql(config.GetConnectionString("DefaultConnection"), builder =>
+            //optionsBuilder.UseNpgsql(config.GetConnectionString("DefaultConnection"), builder =>
+            optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"), builder =>
             {
                 builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
             });

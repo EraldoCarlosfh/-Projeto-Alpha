@@ -27,7 +27,6 @@ namespace Alpha.Domain.Commands
             get
             {
                 if (_loggedUser == null)
-                    // Informações do usuário ainda não foram recuperadas.
                     _loggedUser = GetLoggedUserInformation();
 
                 return _loggedUser;
@@ -46,10 +45,8 @@ namespace Alpha.Domain.Commands
         {
             User loggedUser = null;
 
-            // Se existir informações do usuário logado, buscar dados do usuário na base.
             if (_authenticatedUser != null)
             {
-                // Recuperar informações do usuário logado (AuthenticatedUser).
                 var userId = _authenticatedUser.Id!.ToEntityId();
                 if (userId != null)
                 {

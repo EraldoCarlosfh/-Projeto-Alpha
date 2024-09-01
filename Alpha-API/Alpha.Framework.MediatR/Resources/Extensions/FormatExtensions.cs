@@ -422,7 +422,7 @@ namespace Alpha.Framework.MediatR.Resources.Extensions
                 }
                 else if (c >= 'A' && c <= 'Z')
                 {
-                    sb.Append((char)(c | 32)); // ToLower
+                    sb.Append((char)(c | 32));
                     prevDash = false;
                 }
                 else if (c == ' ' || c == ',' || c == '.' || c == '/' || c == '\\' || c == '-' || c == '_' || c == '=')

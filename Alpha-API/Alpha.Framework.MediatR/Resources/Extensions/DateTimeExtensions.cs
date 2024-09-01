@@ -9,7 +9,7 @@ namespace Alpha.Framework.MediatR.Resources.Extensions
         {
             try
             {
-                var now = DateTimeOffset.Now.Date.AddYears(-1); //Removing 1 year so we can compare the dates 
+                var now = DateTimeOffset.Now.Date.AddYears(-1);
                 var age = new DateTime((now - date).Ticks);
                 return age.Year >= year;
             }

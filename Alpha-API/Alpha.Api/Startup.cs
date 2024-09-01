@@ -44,25 +44,25 @@ namespace Alpha.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddEntityFrameworkSqlServer()
-            //    .AddDbContext<AlphaDataContext>(options =>
-            //    {
-            //        options
-            //            .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
-            //            .ReplaceService<IValueConverterSelector, StronglyTypedValueConverterSelector>();
-
-
-            //    }, ServiceLifetime.Scoped);
-
-            services.AddEntityFrameworkNpgsql()
+            services.AddEntityFrameworkSqlServer()
                 .AddDbContext<AlphaDataContext>(options =>
                 {
                     options
-                        .UseNpgsql(Configuration.GetConnectionString("DefaultConnection"))
+                        .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
                         .ReplaceService<IValueConverterSelector, StronglyTypedValueConverterSelector>();
 
 
                 }, ServiceLifetime.Scoped);
+
+            //services.AddEntityFrameworkNpgsql()
+            //    .AddDbContext<AlphaDataContext>(options =>
+            //    {
+            //        options
+            //            .UseNpgsql(Configuration.GetConnectionString("DefaultConnection"))
+            //            .ReplaceService<IValueConverterSelector, StronglyTypedValueConverterSelector>();
+
+
+            //    }, ServiceLifetime.Scoped);
 
             services.AddCors(options =>
             {

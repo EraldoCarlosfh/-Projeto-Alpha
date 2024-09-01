@@ -43,7 +43,6 @@ namespace Alpha.Framework.MediatR.Api.Authorizations
         {
             var policies = Policies.Split(",").ToList();
 
-            // Loop through policies.  User need only belong to one policy to be authorized.
             foreach (var policy in policies)
             {
                 var authorized = await authorization.AuthorizeAsync(context.HttpContext.User, policy);
