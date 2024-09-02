@@ -25,6 +25,9 @@ Docker - Utilizada imagem docker do banco de dados SqlServer 2022, abaixo comand
 altere o valor de YourStrong@Passw0rd para a senha desejada.
 docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=YourStrong@Passw0rd" -p 1433:1433 --name sqlserver-container -d mcr.microsoft.com/mssql/server:2022-latest
 
+Dica: Para acesso as informações do banco de dados SqlServer rodando com Docker intale o Azure Data Studio e efetue a conexão com os dados da sua
+ConnectionString
+
 Desenvolvimento Backend - .NET CORE 8.0, Entity Framework Core, Fluent Validation, MediatR, Swagger.
 1 - Após inicialização de container docker com imagem do SqlServer inicializar projeto com ISS Express Devlopment
 2 - Rodar comando Add-Migration Initial, no Console do Gerenciador de Pacotes o projeto padrão será o Aplha.Data
